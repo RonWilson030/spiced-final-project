@@ -15,12 +15,15 @@ module.exports.getUserByEmail = (email) => {
     return db.query("SELECT * FROM users WHERE email=$1", [email]);
 };
 
-// compare email query
-
-// insert query for the newly generated code
+module.exports.addCode = (email, code) => {
+    const q =
+        "INSERT INTO reset_codes (email, code) VALUES ($1, $2) RETURNING id";
+    const params = [email, code];
+    return db.query(q, params);
+};
 
 module.exports.getCode = () => {
     return db.query(
-        "SELECT * FROM my_table WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes'"
+        "SELECT * FROM reset_codes WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes'"
     );
 };

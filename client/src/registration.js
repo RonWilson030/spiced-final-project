@@ -33,7 +33,14 @@ export default class Registration extends Component {
             .post("/registration", this.state)
             .then((response) => {
                 console.log("response: ", response);
-                // location.replace("/");
+                if (response.data.length) {
+                    location.replace("/");
+                } else {
+                    this.setState((state) => ({
+                        ...state,
+                        error: true,
+                    }));
+                }
             })
             .catch((err) => {
                 this.setState((state) => ({

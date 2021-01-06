@@ -1,5 +1,6 @@
 import { Component } from "react";
 import axios from "./axios";
+import { Link } from "react-router-dom";
 
 export default class Login extends Component {
     constructor() {
@@ -27,10 +28,17 @@ export default class Login extends Component {
     handleClick() {
         // console.log("click!");
         axios
-            .post("/login")
+            .post("/login", this.state)
             .then((response) => {
                 console.log("response data: ", response.data);
-                location.replace("/");
+                if (response.data.length) {
+                    location.replace("/");
+                } else {
+                    this.setState((state) => ({
+                        ...state,
+                        error: true,
+                    }));
+                }
             })
             .catch((err) => {
                 this.setState((state) => ({

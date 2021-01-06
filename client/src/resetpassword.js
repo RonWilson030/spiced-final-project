@@ -6,9 +6,7 @@ export default class ResetPassword extends Component {
         super();
         this.state = {
             error: false,
-            viewReset: 1,
-            viewCode: 2,
-            viewSuccess: 3,
+            view: 1,
         };
     }
 
@@ -30,10 +28,17 @@ export default class ResetPassword extends Component {
     handleClick() {
         // console.log("click!");
         axios
-            .post("/resetpassword")
+            .post("/resetpassword/reset", this.state)
             .then((response) => {
                 console.log("response data: ", response.data);
-                location.replace("/");
+                if (response.data.length) {
+                    // location.replace("/");
+                } else {
+                    this.setState((state) => ({
+                        ...state,
+                        error: true,
+                    }));
+                }
             })
             .catch((err) => {
                 this.setState((state) => ({
@@ -45,7 +50,7 @@ export default class ResetPassword extends Component {
     }
 
     render() {
-        if (this.state.viewReset === 1) {
+        if (this.state.view === 1) {
             return (
                 <div>
                     <h1>Reset Password</h1>
@@ -59,7 +64,7 @@ export default class ResetPassword extends Component {
                     <button onClick={() => this.handleClick()}>submit</button>
                 </div>
             );
-        } else if (this.state.viewCode === 2) {
+        } else if (this.state.view === 2) {
             return (
                 <div>
                     <h1>Reset Password</h1>
@@ -79,11 +84,11 @@ export default class ResetPassword extends Component {
                     <button onClick={() => this.handleClick()}>submit</button>
                 </div>
             );
-        } else if (this.state.viewSuccess === 3) {
+        } else if (this.state.view === 3) {
             return (
                 <div>
                     <h1>Reset Password</h1>
-                    <h2>Suceess!</h2>
+                    <h2>Success!</h2>
                 </div>
             );
         } else {
