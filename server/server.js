@@ -6,6 +6,8 @@ const cookieSession = require("cookie-session");
 const db = require("./db");
 const { hash, compare } = require("./bcrypt");
 const csurf = require("csurf");
+const cryptoRandomString = require("crypto-random-string");
+const { recipient, message, subject } = require("./ses");
 
 app.use(express.json());
 
@@ -49,23 +51,24 @@ app.get("/welcome", (req, res) => {
 });
 
 app.post("/registration", (req, res) => {
-    const { first, last, eMail, password } = req.body;
-    if (first && last && eMail && password) {
+    console.log("req body: ", req.body);
+    const { first, last, email, password } = req.body;
+    if (first && last && email && password) {
         hash(req.body.password).then((hash) => {
             const hashedPw = hash;
-            db.registerUser(first, last, eMail, hashedPw)
+            db.registerUser(first, last, email, hashedPw)
                 .then((result) => {
                     console.log("register result: ", result);
                     // const userId = result.rows[0].id;
                     // req.session.userId = userId;
-                    // res.json(result.rows);
+                    res.json(result.rows);
                 })
                 .catch((error) => {
                     console.log("registration error", error);
                 });
         });
-    } else {
-        res.sendFile(path.join(__dirname, "..", "client", "index.html"));
+        // } else {
+        //     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
     }
 });
 
@@ -101,6 +104,27 @@ app.post("/login", (req, res) => {
         }
     });
 });
+
+// app.post("/resetpassword/reset", (req, res) => {
+//     // verify email > query
+//     // generate secret code
+//     const secretCode = cryptoRandomString({
+//         length: 6,
+//     });
+//     // send email to the user with secret code
+//     recipient,
+//     message = secretCode,
+//     subject,
+// });
+
+// app.post("/resetpassword/code", (req, res) => {
+//     // // runs when user enters code and new password
+// });
+
+// app.post("/resetpassword/success", (req, res) => {
+//     // verify code (match), make sure it is not expired
+//     // reset hashed password and update users table
+// });
 
 app.get("*", function (req, res) {
     if (!req.session.userId) {

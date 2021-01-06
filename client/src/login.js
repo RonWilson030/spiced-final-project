@@ -61,6 +61,9 @@ export default class Login extends Component {
                     type="password"
                 ></input>
                 <button onClick={() => this.handleClick()}>login</button>
+                <div>
+                    <Link to="/resetpassword">Forgot password?</Link>
+                </div>
             </div>
         );
     }

@@ -30,10 +30,10 @@ export default class Registration extends Component {
     handleClick() {
         // console.log("click!");
         axios
-            .post("/registration")
+            .post("/registration", this.state)
             .then((response) => {
-                console.log("response data: ", response.data);
-                location.replace("/");
+                console.log("response: ", response);
+                // location.replace("/");
             })
             .catch((err) => {
                 this.setState((state) => ({
