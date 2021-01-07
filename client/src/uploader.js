@@ -4,7 +4,9 @@ import axios from "./axios";
 export default class Uploader extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            file: null,
+        };
     }
 
     componentDidMount() {
@@ -12,28 +14,38 @@ export default class Uploader extends Component {
     }
 
     handleFileChange(e) {
-        this.setState({
-            [e.target.file]: e.target.files[0],
-        });
+        this.setState(
+            {
+                file: e.target.files[0],
+            },
+            () => {
+                console.log(this.state);
+            }
+        );
     }
 
     handleUpload() {
         // console.log("click!");
         console.log("this.props in uploader: ", this.props);
-        this.props.setImage(file);
+        var formData = new FormData();
+        formData.append("image", this.state.file);
 
         axios
-            .post("/uploader", this.state)
+            .post("/uploader", formData)
             .then((response) => {
                 console.log("response: ", response);
+                this.props.setImage(response.data.profilePic);
             })
             .catch((err) => {
-                // this.setState((state) => ({
-                //     ...state,
-                //     error: true,
-                // }));
                 console.log(err);
             });
+    }
+
+    closeModal() {
+        // console.log(
+        //     "closeModal runs and about to emit an event from the component!!!!!!"
+        // );
+        this.props.toggleUploader();
     }
 
     render() {
@@ -48,6 +60,7 @@ export default class Uploader extends Component {
                     accept="image/*"
                 ></input>
                 <button onClick={() => this.handleUpload()}>upload</button>
+                <p onClick={() => this.closeModal()}>X</p>
             </div>
         );
     }

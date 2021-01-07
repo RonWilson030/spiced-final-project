@@ -11,7 +11,7 @@ export default class App extends Component {
             user_id: "",
             first: "",
             last: "",
-            url: "",
+            profilePic: "",
             bio: "",
             uploaderIsVisible: false,
         };
@@ -25,7 +25,7 @@ export default class App extends Component {
             .get("/user")
             .then(({ data }) => {
                 this.setState({ ...data }, () => {
-                    console.table("this.state: ", this.state);
+                    console.log("app user this.state: ", this.state);
                 });
             })
             .catch((err) => console.log("error receiving data", err));
@@ -51,10 +51,12 @@ export default class App extends Component {
         // }
     }
 
-    setImage(file) {
-        var formData = new FormData();
+    setImage(profilePic) {
+        // var formData = new FormData();
+        // formData.append('image', file);
+        console.log("set image prop: ", profilePic);
         this.setState({
-            profilePic: "url of profilepic",
+            profilePic,
         });
     }
 
@@ -65,11 +67,10 @@ export default class App extends Component {
             <div>
                 <header className="header-section">
                     <img id="logo" src="link" alt="socialnetwork logo" />
-                    <h1>App</h1>
                     <ProfilePic
                         first={this.state.first}
                         last={this.state.last}
-                        url={this.state.url}
+                        url={this.state.profilePic}
                         toggleUploader={this.toggleUploader}
                     />
                 </header>
@@ -79,7 +80,11 @@ export default class App extends Component {
                         toggleUploader={this.toggleUploader}
                     />
                 )}
-                <Profile />
+                <Profile
+                    first={this.state.first}
+                    last={this.state.last}
+                    url={this.state.profilePic}
+                />
             </div>
         );
     }

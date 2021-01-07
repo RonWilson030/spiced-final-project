@@ -15,6 +15,10 @@ module.exports.getUserByEmail = (email) => {
     return db.query("SELECT * FROM users WHERE email=$1", [email]);
 };
 
+module.exports.getUserById = (id) => {
+    return db.query("SELECT * FROM users WHERE id=$1", [id]);
+};
+
 module.exports.addCode = (email, code) => {
     const q =
         "INSERT INTO reset_codes (email, code) VALUES ($1, $2) RETURNING id";
@@ -39,4 +43,15 @@ module.exports.updatePassword = (email, password) => {
     RETURNING id`;
     const params = [email, password];
     return db.query(q, params);
+};
+
+module.exports.updateProfilePic = (userId, url) => {
+    return db.query(
+        `
+    UPDATE users
+    SET profile_pic=$2
+    WHERE id=$1
+    RETURNING id`,
+        [userId, url]
+    );
 };

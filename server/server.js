@@ -74,6 +74,25 @@ app.get("/welcome", (req, res) => {
     }
 });
 
+app.get("/user", (req, res) => {
+    const userId = req.session.userId;
+    db.getUserById(userId)
+        .then((response) => {
+            console.log("get user response: ", response);
+            const {
+                first,
+                last,
+                email,
+                profile_pic: profilePic,
+                bio,
+            } = response.rows[0];
+            res.json({ first, last, email, profilePic, bio });
+        })
+        .catch((error) => {
+            console.log("registration error", error);
+        });
+});
+
 app.post("/registration", (req, res) => {
     // console.log("req body: ", req.body);
     const { first, last, email, password } = req.body;
@@ -171,15 +190,16 @@ app.post("/password/reset/code", (req, res) => {
     });
 });
 
-app.post("/uploader", uploader.single("file"), s3.upload, (req, res) => {
+app.post("/uploader", uploader.single("image"), s3.upload, (req, res) => {
     console.log("req body: ", req.body);
     console.log("file: ", req.file);
+    const userId = req.session.userId;
     const url = s3Url + req.file.filename;
-    db.updateImage(url)
+    db.updateProfilePic(userId, url)
         .then((result) => {
             console.log("result image: ", result);
             if (req.file) {
-                res.json({ success: true, imagedata: result.rows[0] });
+                res.json({ success: true, profilePic: url });
             } else {
                 res.json({ success: false });
             }

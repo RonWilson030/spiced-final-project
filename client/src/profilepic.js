@@ -1,5 +1,5 @@
 export default function ProfilePic({ toggleUploader, url, first, last }) {
-    console.log("props in profilepic: ", first, last);
+    console.log("props in profilepic: ", first, last, url);
     return (
         <div>
             <img
