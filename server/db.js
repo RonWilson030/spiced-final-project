@@ -22,8 +22,21 @@ module.exports.addCode = (email, code) => {
     return db.query(q, params);
 };
 
-module.exports.getCode = () => {
+module.exports.getCode = (code) => {
     return db.query(
-        "SELECT * FROM reset_codes WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes'"
+        `SELECT * 
+        FROM reset_codes 
+        WHERE CURRENT_TIMESTAMP - timestamp < INTERVAL '10 minutes'
+        AND code = $1`,
+        [code]
     );
+};
+
+module.exports.updatePassword = (id, password) => {
+    const q = `UPDATE users
+    SET password=$2
+    WHERE users.id=$1
+    RETURNING id`;
+    const params = [id, password];
+    return db.query(q, params);
 };

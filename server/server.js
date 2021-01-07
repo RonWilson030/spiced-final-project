@@ -86,83 +86,68 @@ app.post("/login", (req, res) => {
                         const userId = userResult.rows[0].id;
                         req.session.userId = userId;
                         res.json({ success: true });
-                        // } else {
-                        // res.render("login", {
-                        //     layout: "main",
-                        //     title: "Petition",
-                        //     error: true,
-                        // });
                     }
                 })
                 .catch((error) => {
                     console.log("login error:", error);
                 });
-        } else {
-            // res.render("login", {
-            //     layout: "main",
-            //     title: "Petition",
-            //     error: true,
-            // });
         }
     });
 });
 
-app.post("/resetpassword/reset", (req, res) => {
+app.post("/password/reset", (req, res) => {
     const { email } = req.body;
-    console.log("reset req body: ", req.body);
+    // console.log("reset req body: ", req.body);
     db.getUserByEmail(email).then((emailResult) => {
-        console.log("email result:", emailResult);
+        // console.log("email result:", emailResult);
         if (emailResult.rows.length === 1) {
-            compare(email).then((matched) => {
-                console.log("matched result:", matched);
-                if (matched) {
-                    const secretCode = cryptoRandomString({
-                        length: 6,
-                    });
-                    db.addCode(email, secretCode)
-                        .then((addCodeResult) => {
-                            console.log("add code result:", addCodeResult);
-                            sendEmail(
-                                email,
-                                secretCode,
-                                "heres your code to reset your password"
-                            )
-                                .then(() => res.json({ success: true }))
-                                .catch((error) => {
-                                    console.log("login error:", error);
-                                });
-                        })
+            const secretCode = cryptoRandomString({
+                length: 6,
+            });
+            db.addCode(email, secretCode)
+                .then((addCodeResult) => {
+                    console.log("add code result:", addCodeResult);
+                    sendEmail(
+                        email,
+                        secretCode,
+                        "heres your code to reset your password"
+                    )
+                        .then(() => res.json({ success: true }))
                         .catch((error) => {
                             console.log("login error:", error);
                         });
-                }
-                // } else {
-                //     // res.render("login", {
-                //     //     layout: "main",
-                //     //     title: "Petition",
-                //     //     error: true,
-                //     // });
-                // }
-                //             })
-                //         .catch((error) => {
-                //             console.log("login error:", error);
-                //         });
-                // } else {
-
-                // };
-            });
+                })
+                .catch((error) => {
+                    console.log("login error:", error);
+                });
         }
     });
 });
 
-// app.post("/resetpassword/code", (req, res) => {
-//     // // runs when user enters code and new password
-// });
-
-// app.post("/resetpassword/success", (req, res) => {
-//     // verify code (match), make sure it is not expired
-//     // reset hashed password and update users table
-// });
+app.post("/password/reset/code", (req, res) => {
+    // console.log("req body: ", req.body);
+    const { code, newpassword } = req.body;
+    const userId = req.session.userId;
+    db.getCode(code).then((getCodeResult) => {
+        // console.log("get code result: ", getCodeResult);
+        if (getCodeResult.rows.length === 1 && newpassword) {
+            hash(newpassword)
+                .then((hash) => {
+                    const hashedPw = hash;
+                    db.updatePassword(userId, hashedPw)
+                        .then(() => {
+                            res.json({ success: true });
+                        })
+                        .catch((error) => {
+                            console.log("reset code and pw error:", error);
+                        });
+                })
+                .catch((error) => {
+                    console.log("hash error:", error);
+                });
+        }
+    });
+});
 
 app.get("*", function (req, res) {
     if (!req.session.userId) {

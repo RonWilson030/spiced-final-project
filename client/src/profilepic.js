@@ -1,10 +1,13 @@
-export default function ProfilePic({ first, last }) {
+export default function ProfilePic({ toggleUploader, url, first, last }) {
     console.log("props in profilepic: ", first, last);
     return (
         <div>
-            <h1>
-                ProfilePic: {first} {last}
-            </h1>
+            <img
+                id="avatar"
+                onClick={toggleUploader}
+                src={url}
+                alt={`${first} ${last}`}
+            />
         </div>
     );
 }

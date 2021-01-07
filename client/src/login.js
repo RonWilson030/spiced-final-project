@@ -31,7 +31,7 @@ export default class Login extends Component {
             .post("/login", this.state)
             .then((response) => {
                 console.log("response data: ", response.data);
-                if (response.data.length) {
+                if (response.data.success) {
                     location.replace("/");
                 } else {
                     this.setState((state) => ({
@@ -70,7 +70,7 @@ export default class Login extends Component {
                 ></input>
                 <button onClick={() => this.handleClick()}>login</button>
                 <div>
-                    <Link to="/resetpassword">Forgot password?</Link>
+                    <Link to="/password/reset">Forgot password?</Link>
                 </div>
             </div>
         );

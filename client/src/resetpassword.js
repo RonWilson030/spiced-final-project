@@ -1,5 +1,6 @@
 import { Component } from "react";
 import axios from "./axios";
+import { Link } from "react-router-dom";
 
 export default class ResetPassword extends Component {
     constructor() {
@@ -25,14 +26,43 @@ export default class ResetPassword extends Component {
         );
     }
 
-    handleClick() {
+    handleResetClick() {
         // console.log("click!");
         axios
-            .post("/resetpassword/reset", this.state)
+            .post("/password/reset", this.state)
             .then((response) => {
                 console.log("response data: ", response.data);
-                if (response.data.length) {
-                    // location.replace("/");
+                if (response.data.success) {
+                    this.setState((state) => ({
+                        ...state,
+                        view: 2,
+                    }));
+                } else {
+                    this.setState((state) => ({
+                        ...state,
+                        error: true,
+                    }));
+                }
+            })
+            .catch((err) => {
+                this.setState((state) => ({
+                    ...state,
+                    error: true,
+                }));
+                console.log(err);
+            });
+    }
+
+    handleSubmitCode() {
+        axios
+            .post("/password/reset/code", this.state)
+            .then((response) => {
+                console.log("response data code: ", response.data);
+                if (response.data.success) {
+                    this.setState((state) => ({
+                        ...state,
+                        view: 3,
+                    }));
                 } else {
                     this.setState((state) => ({
                         ...state,
@@ -50,6 +80,7 @@ export default class ResetPassword extends Component {
     }
 
     render() {
+        console.log("state view", this.state.view);
         if (this.state.view === 1) {
             return (
                 <div>
@@ -57,11 +88,14 @@ export default class ResetPassword extends Component {
                     <h2>Please enter your registered email:</h2>
                     <input
                         onChange={(e) => this.handleChange(e)}
+                        key="key_email"
                         name="email"
                         placeholder="email"
                         type="text"
                     ></input>
-                    <button onClick={() => this.handleClick()}>submit</button>
+                    <button onClick={() => this.handleResetClick()}>
+                        submit
+                    </button>
                 </div>
             );
         } else if (this.state.view === 2) {
@@ -71,17 +105,20 @@ export default class ResetPassword extends Component {
                     <h2>Please enter your code and new password:</h2>
                     <input
                         onChange={(e) => this.handleChange(e)}
+                        key="key_code"
                         name="code"
                         placeholder="code"
                         type="text"
                     ></input>
                     <input
                         onChange={(e) => this.handleChange(e)}
-                        name="newPassword"
+                        name="newpassword"
                         placeholder="new password"
                         type="password"
                     ></input>
-                    <button onClick={() => this.handleClick()}>submit</button>
+                    <button onClick={() => this.handleSubmitCode()}>
+                        submit
+                    </button>
                 </div>
             );
         } else if (this.state.view === 3) {
@@ -89,6 +126,7 @@ export default class ResetPassword extends Component {
                 <div>
                     <h1>Reset Password</h1>
                     <h2>Success!</h2>
+                    <Link to="/login">Log in!</Link>
                 </div>
             );
         } else {
