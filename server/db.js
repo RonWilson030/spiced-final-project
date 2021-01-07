@@ -32,11 +32,11 @@ module.exports.getCode = (code) => {
     );
 };
 
-module.exports.updatePassword = (id, password) => {
+module.exports.updatePassword = (email, password) => {
     const q = `UPDATE users
     SET password=$2
-    WHERE users.id=$1
+    WHERE email=$1
     RETURNING id`;
-    const params = [id, password];
+    const params = [email, password];
     return db.query(q, params);
 };

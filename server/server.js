@@ -8,8 +8,32 @@ const { hash, compare } = require("./bcrypt");
 const csurf = require("csurf");
 const cryptoRandomString = require("crypto-random-string");
 const { sendEmail } = require("./ses");
+const s3 = require("./s3");
+const { s3Url } = require("./config");
+const multer = require("multer");
+const uidSafe = require("uid-safe");
 
 app.use(express.json());
+
+const storage = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, __dirname + "/uploads");
+    },
+    filename: (req, file, callback) => {
+        uidSafe(24)
+            .then((uid) => {
+                callback(null, `${uid}${path.extname(file.originalname)}`);
+            })
+            .catch((error) => callback(error));
+    },
+});
+
+const uploader = multer({
+    storage,
+    limits: {
+        fileSize: 2097152, //2MB
+    },
+});
 
 app.use(
     cookieSession({
@@ -123,16 +147,16 @@ app.post("/password/reset", (req, res) => {
 });
 
 app.post("/password/reset/code", (req, res) => {
-    // console.log("req body: ", req.body);
-    const { code, newpassword } = req.body;
-    const userId = req.session.userId;
+    console.log("req body: ", req.body);
+    const { email, code, newpassword } = req.body;
+    // const userId = req.session.userId;
     db.getCode(code).then((getCodeResult) => {
-        // console.log("get code result: ", getCodeResult);
+        console.log("get code result: ", getCodeResult);
         if (getCodeResult.rows.length === 1 && newpassword) {
             hash(newpassword)
                 .then((hash) => {
                     const hashedPw = hash;
-                    db.updatePassword(userId, hashedPw)
+                    db.updatePassword(email, hashedPw)
                         .then(() => {
                             res.json({ success: true });
                         })
@@ -145,6 +169,22 @@ app.post("/password/reset/code", (req, res) => {
                 });
         }
     });
+});
+
+app.post("/uploader", uploader.single("file"), s3.upload, (req, res) => {
+    console.log("req body: ", req.body);
+    console.log("file: ", req.file);
+    const url = s3Url + req.file.filename;
+    db.updateImage(url)
+        .then((result) => {
+            console.log("result image: ", result);
+            if (req.file) {
+                res.json({ success: true, imagedata: result.rows[0] });
+            } else {
+                res.json({ success: false });
+            }
+        })
+        .catch();
 });
 
 app.get("*", function (req, res) {
