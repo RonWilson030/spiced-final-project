@@ -67,8 +67,6 @@ app.post("/registration", (req, res) => {
                     console.log("registration error", error);
                 });
         });
-        // } else {
-        //     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
     }
 });
 

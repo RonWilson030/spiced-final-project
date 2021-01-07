@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { HashRouter, Route } from "react-router-dom";
 import axios from "./axios";
 import Profile from "./profile";
 import ProfilePic from "./profilepic";
@@ -16,7 +17,7 @@ export default class App extends Component {
             uploaderIsVisible: false,
         };
         this.setImage = this.setImage.bind(this);
-        this.toggleUploader = this.toggleModal.bind(this);
+        this.toggleUploader = this.toggleUploader.bind(this);
     }
 
     componentDidMount() {
@@ -62,6 +63,11 @@ export default class App extends Component {
         console.log("this.state.last: ", this.state.last);
         return (
             <div>
+                {/* <HashRouter>
+                    <div>
+                        <Route exact path="/" component={Registration} />
+                    </div>
+                </HashRouter> */}
                 <header className="header-section">
                     <img id="logo" src="link" alt="socialnetwork logo" />
                     <h1>App</h1>
@@ -71,9 +77,7 @@ export default class App extends Component {
                         url={this.state.url}
                         toggleUploader={this.toggleUploader}
                     />
-                    <h2 onClick={() => this.toggleUploader()}>
-                        demo click me modal
-                    </h2>
+                    <h2 onClick={this.toggleUploader}>demo click me modal</h2>
                     {this.state.uploaderIsVisible && (
                         <Uploader
                             setImage={this.setImage}
