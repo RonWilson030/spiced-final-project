@@ -16,7 +16,21 @@ module.exports.getUserByEmail = (email) => {
 };
 
 module.exports.getUserById = (id) => {
-    return db.query("SELECT * FROM users WHERE id=$1", [id]);
+    return db.query(
+        `SELECT users.id, users.first, users.last, users.email, users.profile_pic, users.bio
+        FROM users
+        WHERE id=$1`,
+        [id]
+    );
+};
+
+module.exports.getOtherUserById = (id) => {
+    return db.query(
+        `SELECT *
+        FROM users
+        WHERE id=$1`,
+        [id]
+    );
 };
 
 module.exports.addCode = (email, code) => {
@@ -53,5 +67,16 @@ module.exports.updateProfilePic = (userId, url) => {
     WHERE id=$1
     RETURNING id`,
         [userId, url]
+    );
+};
+
+module.exports.updateBio = (userId, bio) => {
+    return db.query(
+        `
+    UPDATE users
+    SET bio=$2
+    WHERE id=$1
+    RETURNING id, bio`,
+        [userId, bio]
     );
 };

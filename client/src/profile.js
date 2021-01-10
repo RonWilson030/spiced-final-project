@@ -1,16 +1,30 @@
-import ProfilePic from "./profilepic";
 import BioEditor from "./bioeditor";
 
-export default function Profile({ url, first, last }) {
+export default function Profile({
+    profilePic,
+    first,
+    last,
+    setBio,
+    bio,
+    toggleUploader,
+}) {
     // console.log("profile props: ", props);
     return (
-        <div>
-            <h1>userprofile component</h1>
-            <h3>
-                hello my name is {first} {last}
-            </h3>
-            <ProfilePic first={first} last={last} url={url} />
-            <BioEditor />
+        <div id="profile">
+            <img
+                id="profile-avatar"
+                className="hand-cursor"
+                onClick={toggleUploader}
+                src={profilePic}
+                alt={`${first} ${last}`}
+            />
+            <div id="profile-info">
+                <div>
+                    {first} {last}
+                </div>
+                <div id="bio-text">{bio}</div>
+                <BioEditor currentBio={bio} setBio={setBio} />
+            </div>
         </div>
     );
 }

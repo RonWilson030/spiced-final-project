@@ -3,39 +3,40 @@ import axios from "./axios";
 import Profile from "./profile";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
+import OtherProfile from "./otherprofile";
+import { BrowserRouter, Route } from "react-router-dom";
+// import BioEditor from "./bioeditor";
 
 export default class App extends Component {
     constructor() {
         super();
         this.state = {
-            user_id: "",
+            id: "",
             first: "",
             last: "",
-            profilePic: "",
+            profilePic: "" || "/default.png",
             bio: "",
             uploaderIsVisible: false,
         };
         this.setImage = this.setImage.bind(this);
         this.toggleUploader = this.toggleUploader.bind(this);
+        this.setBio = this.setBio.bind(this);
     }
 
     componentDidMount() {
         console.log("app component mounted!");
         axios
-            .get("/user")
+            .get("/user/")
             .then(({ data }) => {
                 this.setState({ ...data }, () => {
-                    console.log("app user this.state: ", this.state);
+                    // console.log("app user this.state: ", this.state);
                 });
             })
             .catch((err) => console.log("error receiving data", err));
-        // use axios:
-        // get info (all except password) on user
-        // response stored in state of app
     }
 
     toggleUploader() {
-        console.log("toggle uploader running!");
+        // console.log("toggle uploader running!");
         this.setState({
             uploaderIsVisible: !this.state.uploaderIsVisible,
         });
@@ -52,40 +53,78 @@ export default class App extends Component {
     }
 
     setImage(profilePic) {
-        // var formData = new FormData();
-        // formData.append('image', file);
-        console.log("set image prop: ", profilePic);
+        // console.log("set image prop: ", profilePic);
         this.setState({
             profilePic,
         });
     }
 
+    setBio(bio) {
+        // console.log("set bio prop: ", bio);
+        this.setState({
+            bio,
+        });
+    }
+
     render() {
-        console.log("this.state.first: ", this.state.first);
-        console.log("this.state.last: ", this.state.last);
+        // console.log("this.state.first: ", this.state.first);
+        // console.log("this.state.last: ", this.state.last);
+
+        // if (!id) {return null;}
         return (
-            <div>
-                <header className="header-section">
-                    <img id="logo" src="link" alt="socialnetwork logo" />
-                    <ProfilePic
-                        first={this.state.first}
-                        last={this.state.last}
-                        url={this.state.profilePic}
-                        toggleUploader={this.toggleUploader}
+            <BrowserRouter>
+                <div className="container">
+                    <header className="header-section">
+                        <img id="logo" src="link" alt="socialnetwork logo" />
+                        <ProfilePic
+                            first={this.state.first}
+                            last={this.state.last}
+                            profilePic={this.state.profilePic || "/default.png"}
+                            toggleUploader={this.toggleUploader}
+                        />
+                    </header>
+
+                    <Route
+                        exact
+                        path="/"
+                        render={() => (
+                            <Profile
+                                first={this.state.first}
+                                last={this.state.last}
+                                profilePic={
+                                    this.state.profilePic || "/default.png"
+                                }
+                                bio={this.state.bio}
+                                setBio={this.setBio}
+                                toggleUploader={this.toggleUploader}
+                            />
+                        )}
                     />
-                </header>
-                {this.state.uploaderIsVisible && (
-                    <Uploader
-                        setImage={this.setImage}
-                        toggleUploader={this.toggleUploader}
+
+                    <Route
+                        path="/user/:id"
+                        render={(props) => (
+                            <OtherProfile
+                                key={props.match.profilePic}
+                                match={props.match}
+                                history={props.history}
+                            />
+                        )}
                     />
-                )}
-                <Profile
-                    first={this.state.first}
-                    last={this.state.last}
-                    url={this.state.profilePic}
-                />
-            </div>
+
+                    {this.state.uploaderIsVisible && (
+                        <div id="overlay">
+                            <Uploader
+                                profilePic={
+                                    this.state.profilePic || "default.png"
+                                }
+                                setImage={this.setImage}
+                                toggleUploader={this.toggleUploader}
+                            />
+                        </div>
+                    )}
+                </div>
+            </BrowserRouter>
         );
     }
 }

@@ -4,12 +4,83 @@ body {
 
 header {
     background-color: lightblue;
-    overflow: auto;
+    height: 50px;
+    padding: 1em;
 }
 
-#avatar {
+header #logo {
+    float: left;
     width: 50px;
     height: 50px;
     padding: 5px;
     margin: auto;
+}
+
+header #avatar {
+    object-fit: cover;
+    border-radius: 50px 50px;
+    float: right;
+    width: 50px;
+    height: 50px;
+    padding: 5px;
+    margin: -5px 0 0 -5px;
+}
+
+#profile-avatar {
+    object-fit: cover;
+    width: 150px;
+    height: 150px;
+    padding: 5px;
+    /* margin: auto; */
+}
+
+#profile {
+    background-color: tomato;
+    display: flex;
+    justify-content: center;
+    padding: 1em;
+    margin: auto;
+}
+
+#profile-info {
+    padding: 1em;
+    margin: auto;
+}
+
+#bio-text {
+    background-color: whitesmoke;
+    width: 30em;
+    padding: 1em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.uploader {
+    position: absolute;
+    text-align: center;
+    top: 20%;
+    left: 50%;
+    background-color: yellowgreen;
+    box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    padding: 1em;
+    margin: auto;
+}
+
+#uploader-image {
+    width: 30em;
+}
+
+.hand-cursor {
+    cursor: pointer;
+}
+
+button {
+    padding: 0.2em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
 }

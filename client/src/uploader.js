@@ -35,6 +35,7 @@ export default class Uploader extends Component {
             .then((response) => {
                 console.log("response: ", response);
                 this.props.setImage(response.data.profilePic);
+                // this.props.toggleUploader();
             })
             .catch((err) => {
                 console.log(err);
@@ -51,7 +52,8 @@ export default class Uploader extends Component {
     render() {
         console.log("props in uploader: ", this.props);
         return (
-            <div>
+            <div className="uploader">
+                <img id="uploader-image" src={this.props.profilePic} />
                 <p>change profilepic?</p>
                 <input
                     onChange={(e) => this.handleFileChange(e)}
@@ -59,8 +61,15 @@ export default class Uploader extends Component {
                     type="file"
                     accept="image/*"
                 ></input>
-                <button onClick={() => this.handleUpload()}>upload</button>
-                <p onClick={() => this.closeModal()}>X</p>
+                <button
+                    className="hand-cursor"
+                    onClick={() => this.handleUpload()}
+                >
+                    upload
+                </button>
+                <p className="hand-cursor" onClick={() => this.closeModal()}>
+                    X
+                </p>
             </div>
         );
     }
