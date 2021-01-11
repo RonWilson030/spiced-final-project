@@ -74,7 +74,7 @@ app.get("/welcome", (req, res) => {
     }
 });
 
-app.get("/user", (req, res) => {
+app.get("/api/users", (req, res) => {
     const userId = req.session.userId;
     db.getUserById(userId)
         .then((response) => {
@@ -89,11 +89,43 @@ app.get("/user", (req, res) => {
             res.json({ first, last, email, profilePic, bio });
         })
         .catch((error) => {
-            console.log("registration error", error);
+            console.log("users error", error);
         });
 });
 
-app.get("/other-user/:id", (req, res) => {
+app.get("/api/users/last", (req, res) => {
+    // const userId = req.session.userId;
+    db.getLastUsers()
+        .then((response) => {
+            // console.log("get users response: ", response);
+            res.json(response.rows);
+        })
+        .catch((error) => {
+            console.log("last users error", error);
+        });
+});
+
+app.get("/api/users/search", (req, res) => {
+    const { q } = req.query;
+    console.log("req params q: ", req.query);
+    db.searchForUsers(q)
+        .then((response) => {
+            // console.log("get user response: ", response);
+            res.json(
+                response.rows.map(({ id, first, last, profile_pic }) => ({
+                    id,
+                    first,
+                    last,
+                    profile_pic,
+                }))
+            );
+        })
+        .catch((error) => {
+            console.log("search error", error);
+        });
+});
+
+app.get("/api/users/:id", (req, res) => {
     // console.log("req params", req.params);
     // console.log("user id:", req.session.userId);
     const id = parseInt(req.params.id);
@@ -119,7 +151,7 @@ app.get("/other-user/:id", (req, res) => {
                 }
             })
             .catch((error) => {
-                console.log("registration error", error);
+                console.log("users error", error);
             });
     }
 });

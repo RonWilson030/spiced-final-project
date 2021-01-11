@@ -18,7 +18,7 @@ export default class OtherProfile extends Component {
         // console.log("this props match: ", this.props.match.params.id);
         const otherUserId = this.props.match.params.id;
         axios
-            .get("/other-user/" + otherUserId)
+            .get("/api/users/" + otherUserId)
             .then((response) => {
                 // console.log("other-user response", response);
                 if (response.data.noSuchUser) {

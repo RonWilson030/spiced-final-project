@@ -2,9 +2,10 @@ import { Component } from "react";
 import axios from "./axios";
 import Profile from "./profile";
 import ProfilePic from "./profilepic";
+import FindPeople from "./findpeople";
 import Uploader from "./uploader";
 import OtherProfile from "./otherprofile";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Link } from "react-router-dom";
 // import BioEditor from "./bioeditor";
 
 export default class App extends Component {
@@ -24,7 +25,7 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        console.log("app component mounted!");
+        // console.log("app component mounted!");
         axios
             .get("/user/")
             .then(({ data }) => {
@@ -82,6 +83,9 @@ export default class App extends Component {
                             profilePic={this.state.profilePic || "/default.png"}
                             toggleUploader={this.toggleUploader}
                         />
+                        <div id="find-friends" className="hand-cursor">
+                            <Link to="/users/">Find friends</Link>
+                        </div>
                     </header>
 
                     <Route
@@ -102,7 +106,7 @@ export default class App extends Component {
                     />
 
                     <Route
-                        path="/user/:id"
+                        path="/users/:id"
                         render={(props) => (
                             <OtherProfile
                                 key={props.match.profilePic}
@@ -111,6 +115,8 @@ export default class App extends Component {
                             />
                         )}
                     />
+
+                    <Route exact path="/users" render={() => <FindPeople />} />
 
                     {this.state.uploaderIsVisible && (
                         <div id="overlay">

@@ -24,6 +24,13 @@ module.exports.getUserById = (id) => {
     );
 };
 
+module.exports.searchForUsers = (val) => {
+    return db.query(
+        `SELECT * FROM users WHERE first ILIKE $1 OR last ILIKE $1 ;`,
+        [val + "%"]
+    );
+};
+
 module.exports.getOtherUserById = (id) => {
     return db.query(
         `SELECT *
@@ -79,4 +86,8 @@ module.exports.updateBio = (userId, bio) => {
     RETURNING id, bio`,
         [userId, bio]
     );
+};
+
+module.exports.getLastUsers = () => {
+    return db.query("SELECT * FROM users ORDER BY id DESC LIMIT 3");
 };

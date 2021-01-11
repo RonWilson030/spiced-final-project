@@ -26,6 +26,9 @@ header #avatar {
     margin: -5px 0 0 -5px;
 }
 
+.find-friends {
+}
+
 #profile-avatar {
     object-fit: cover;
     width: 150px;
