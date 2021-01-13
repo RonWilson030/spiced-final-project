@@ -35,13 +35,13 @@ export default function FriendshipButton({ userId, otherUserId }) {
             })
             .then((result) => {
                 console.log("post result: ", result);
-                const response = result.data.rows;
-                const text = friendsStatusButtonText(
-                    response,
-                    userId,
-                    otherUserId
-                );
-                setButtonText(text);
+                // const response = result.data.rows;
+                // const text = friendsStatusButtonText(
+                //     response,
+                //     userId,
+                //     otherUserId
+                // );
+                // setButtonText(text);
             })
             .catch((error) => {
                 console.log(error);
@@ -58,7 +58,7 @@ export default function FriendshipButton({ userId, otherUserId }) {
 }
 
 function friendsStatusButtonText(rows, userId, otherUserId) {
-    const { recipient_id, sender_id, accepted } = rows;
+    const [recipient_id, sender_id, accepted] = rows;
     // console.log("result: ", result);
 
     if (rows.length === 0) {
