@@ -42,6 +42,7 @@ export default function FindPeople() {
     // console.log("********* RENDERING <FindPeople /> *************");
     return (
         <div>
+            {/* {query && <div></div>} */}
             <h2>Find your friends:</h2>
             <input
                 onChange={(e) => setQuery(e.target.value)}

@@ -27,7 +27,7 @@ export default class App extends Component {
     componentDidMount() {
         // console.log("app component mounted!");
         axios
-            .get("/user/")
+            .get("/api/users/")
             .then(({ data }) => {
                 this.setState({ ...data }, () => {
                     // console.log("app user this.state: ", this.state);
@@ -109,6 +109,7 @@ export default class App extends Component {
                         path="/users/:id"
                         render={(props) => (
                             <OtherProfile
+                                userId={this.state.id}
                                 key={props.match.profilePic}
                                 match={props.match}
                                 history={props.history}

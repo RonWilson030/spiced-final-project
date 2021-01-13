@@ -91,3 +91,42 @@ module.exports.updateBio = (userId, bio) => {
 module.exports.getLastUsers = () => {
     return db.query("SELECT * FROM users ORDER BY id DESC LIMIT 3");
 };
+
+module.exports.getFriendshipStatus = ({ userId, otherUserId }) => {
+    return db.query(
+        `SELECT *
+        FROM friendships
+        WHERE (recipient_id = $1 AND sender_id = $2)
+        OR (recipient_id = $2 AND sender_id = $1)`,
+        [userId, otherUserId]
+    );
+};
+
+module.exports.makeRequest = ({ userId, otherUserId }) => {
+    return db.query(
+        `INSERT INTO friendships (sender_id, recipient_id)
+        VALUES ($1, $2)
+        RETURNING sender_id, recipient_id, accepted`,
+        [userId, otherUserId]
+    );
+};
+
+module.exports.cancelRequest = ({ userId, otherUserId }) => {
+    return db.query(
+        `DELETE FROM friendships
+        WHERE sender_id = $1
+        AND recipient_id = $2`,
+        [userId, otherUserId]
+    );
+};
+
+module.exports.acceptRequest = ({ userId, otherUserId }) => {
+    return db.query(
+        `UPDATE friendships
+        SET accepted = true
+        WHERE sender_id = $2
+        AND recipient_id = $1
+        RETURNING sender_id, recipient_id, accepted`,
+        [userId, otherUserId]
+    );
+};
