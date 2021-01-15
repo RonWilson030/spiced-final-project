@@ -306,16 +306,17 @@ app.post("/friendship/action", (req, res) => {
     if (action === "Make Request") {
         db.makeRequest({ userId, otherUserId })
             .then((response) => {
-                console.log("make request response: ", response);
+                // console.log("make request response: ", response);
                 res.json({ success: true, rows: response.rows });
             })
             .catch((error) => {
                 console.log("make request error", error);
             });
     } else if (action === "Cancel Request" || action === "Unfriend") {
+        // console.log("user id & otheruserId:", userId, otherUserId);
         db.cancelRequest({ userId, otherUserId })
             .then((response) => {
-                console.log("cancel/unfriend request response: ", response);
+                // console.log("cancel/unfriend request response: ", response);
                 res.json({ success: true, rows: response.rows });
             })
             .catch((error) => {
@@ -324,7 +325,7 @@ app.post("/friendship/action", (req, res) => {
     } else if (action === "Accept Request") {
         db.acceptRequest({ userId, otherUserId })
             .then((response) => {
-                console.log("accept request response: ", response);
+                // console.log("accept request response: ", response);
                 res.json({ success: true, rows: response.rows });
             })
             .catch((error) => {
@@ -334,26 +335,17 @@ app.post("/friendship/action", (req, res) => {
 });
 
 app.get("/get-friends", (req, res) => {
-    console.log();
-    db.getFriends()
+    // console.log();
+    const userId = req.session.userId;
+    db.getFriends(userId)
         .then((result) => {
-            console.log("get friends result", result);
+            // console.log("get friends result", result);
+            res.json({ success: true, friendsList: result.rows });
         })
         .catch((error) => {
             console.log("get friend error", error);
         });
 });
-
-// app.post("/accept-friends", (req, res) => {
-//     console.log();
-//     db.getFriends()
-//         .then((result) => {
-//             console.log("get friends result", result);
-//         })
-//         .catch((error) => {
-//             console.log("get friend error", error);
-//         });
-// });
 
 app.get("*", function (req, res) {
     if (!req.session.userId) {

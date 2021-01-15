@@ -114,8 +114,8 @@ module.exports.makeRequest = ({ userId, otherUserId }) => {
 module.exports.cancelRequest = ({ userId, otherUserId }) => {
     return db.query(
         `DELETE FROM friendships
-        WHERE sender_id = $1
-        AND recipient_id = $2`,
+        WHERE (sender_id = $1 AND recipient_id = $2)
+        OR (sender_id = $2 AND recipient_id = $1)`,
         [userId, otherUserId]
     );
 };
@@ -136,9 +136,9 @@ module.exports.getFriends = (userId) => {
         `SELECT users.id, first, last, profile_pic, accepted
         FROM friendships
         JOIN users
-        ON (accepted = false AND recipient_id = $1 AND requester_id = users.id)
-        OR (accepted = true AND recipient_id = $1 AND requester_id = users.id)
-        OR (accepted = true AND requester_id = $1 AND recipient_id = users.id)`,
+        ON (accepted = false AND recipient_id = $1 AND sender_id = users.id)
+        OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)
+        OR (accepted = true AND sender_id = $1 AND recipient_id = users.id)`,
         [userId]
     );
 };

@@ -1,26 +1,31 @@
 export default function (state = {}, action) {
-    if (action.type == "GET_USERS") {
+    if (action.type == "GET_FRIENDS") {
         state = {
             ...state,
-            users: action.users,
+            users: action.user,
         };
     }
 
     if (action.type == "ACCEPT_REQUEST") {
+        // console.log("reducer action accept request log");
         state = {
             ...state,
             users: state.users.map((user) => {
-                user.id == action.acceptUser;
-                return { ...user, accepted: true };
+                if (user.id == action.acceptUser) {
+                    return { ...user, accepted: true };
+                } else {
+                    return user;
+                }
             }),
         };
     }
 
     if (action.type == "UNFRIEND") {
+        console.log("reducer action unfriend log");
         state = {
             ...state,
             users: state.users.filter((user) => {
-                user.id == action.unfriendUser;
+                return user.id != action.unfriendUser;
             }),
         };
     }
