@@ -3,6 +3,7 @@ import axios from "./axios";
 import Profile from "./profile";
 import ProfilePic from "./profilepic";
 import FindPeople from "./findpeople";
+import Friends from "./friends";
 import Uploader from "./uploader";
 import OtherProfile from "./otherprofile";
 import { BrowserRouter, Route, Link } from "react-router-dom";
@@ -86,6 +87,9 @@ export default class App extends Component {
                         <div id="find-friends" className="hand-cursor">
                             <Link to="/users/">Find friends</Link>
                         </div>
+                        <div id="friends" className="hand-cursor">
+                            <Link to="/friends/">Friends</Link>
+                        </div>
                     </header>
 
                     <Route
@@ -118,6 +122,8 @@ export default class App extends Component {
                     />
 
                     <Route exact path="/users" render={() => <FindPeople />} />
+
+                    <Route exact path="/friends" render={() => <Friends />} />
 
                     {this.state.uploaderIsVisible && (
                         <div id="overlay">

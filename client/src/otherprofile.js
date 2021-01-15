@@ -53,12 +53,12 @@ export default class OtherProfile extends Component {
                             {this.state.first} {this.state.last}
                         </div>
                         <div id="bio-text">{this.state.bio}</div>
-                    </div>
-                    <div>
-                        <FriendshipButton
-                            userId={this.props.userId}
-                            otherUserId={this.props.match.params.id}
-                        />
+                        <div id="make-friends-button">
+                            <FriendshipButton
+                                userId={this.props.userId}
+                                otherUserId={this.props.match.params.id}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

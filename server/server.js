@@ -286,11 +286,11 @@ app.post("/bio", (req, res) => {
         });
 });
 
-app.get("/friendship/status/:id", (req, res) => {
+app.get("/friendship/status/:otherUserId", (req, res) => {
     // console.log("req params: ", req.params);
     const otherUserId = parseInt(req.params.otherUserId);
     const userId = req.session.userId;
-    db.getFriendshipStatus(userId, otherUserId)
+    db.getFriendshipStatus({ userId, otherUserId })
         .then((response) => {
             console.log("friendship status response: ", response);
             res.json({ rows: response.rows });
@@ -300,36 +300,60 @@ app.get("/friendship/status/:id", (req, res) => {
         });
 });
 
-// const BUTTON_TEXT = Object.create(null, {
-//     MAKE_REQUEST = "Make Request"
-//     CANCEL_REQUEST = "Cancel Request"
-//     UNFRIEND = "Unfriend"
-// });
-
 app.post("/friendship/action", (req, res) => {
     const userId = req.session.userId;
     const { action, otherUserId } = req.body;
     if (action === "Make Request") {
-        db.makeRequest({ userId, otherUserId }).then((response) => {
-            console.log("make request response: ", response);
-            res.json({ success: true, rows: response.rows });
-        });
-    } else if (action === "Cancel Request") {
-        db.cancelRequest({ userId, otherUserId }).then(() => {
-            res.json({});
-        });
-    } else {
-        ("Unfriend");
+        db.makeRequest({ userId, otherUserId })
+            .then((response) => {
+                console.log("make request response: ", response);
+                res.json({ success: true, rows: response.rows });
+            })
+            .catch((error) => {
+                console.log("make request error", error);
+            });
+    } else if (action === "Cancel Request" || action === "Unfriend") {
+        db.cancelRequest({ userId, otherUserId })
+            .then((response) => {
+                console.log("cancel/unfriend request response: ", response);
+                res.json({ success: true, rows: response.rows });
+            })
+            .catch((error) => {
+                console.log("cancel/unfriend request error", error);
+            });
+    } else if (action === "Accept Request") {
+        db.acceptRequest({ userId, otherUserId })
+            .then((response) => {
+                console.log("accept request response: ", response);
+                res.json({ success: true, rows: response.rows });
+            })
+            .catch((error) => {
+                console.log("accept request error", error);
+            });
     }
 });
 
-app.post("/friendship/make-request/:id", (req, res) => {});
+app.get("/get-friends", (req, res) => {
+    console.log();
+    db.getFriends()
+        .then((result) => {
+            console.log("get friends result", result);
+        })
+        .catch((error) => {
+            console.log("get friend error", error);
+        });
+});
 
-app.post("/friendship/accept-request/:id", (req, res) => {});
-
-app.post("/friendship/cancel-request/:id", (req, res) => {});
-
-app.post("/friendship/unfriend/:id", (req, res) => {});
+// app.post("/accept-friends", (req, res) => {
+//     console.log();
+//     db.getFriends()
+//         .then((result) => {
+//             console.log("get friends result", result);
+//         })
+//         .catch((error) => {
+//             console.log("get friend error", error);
+//         });
+// });
 
 app.get("*", function (req, res) {
     if (!req.session.userId) {
