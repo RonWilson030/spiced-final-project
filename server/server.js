@@ -12,7 +12,12 @@ const s3 = require("./s3");
 const { s3Url } = require("./config");
 const multer = require("multer");
 const uidSafe = require("uid-safe");
-
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+    allowRequest: (req, callback) =>
+        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+});
+/////////////////////////////////////////////////////////////////////////////////
 app.use(express.json());
 
 const storage = multer.diskStorage({
@@ -35,12 +40,16 @@ const uploader = multer({
     },
 });
 
-app.use(
-    cookieSession({
-        secret: `Cookie monster!`,
-        maxAge: 1000 * 60 * 60 * 24 * 1,
-    })
-);
+const cookieSessionMiddleware = cookieSession({
+    secret: `Cookie monster!`,
+    maxAge: 1000 * 60 * 60 * 24 * 1,
+});
+
+app.use(cookieSessionMiddleware);
+
+io.use(function (socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 
 app.use(csurf());
 
@@ -65,6 +74,8 @@ app.use(express.static(path.join(__dirname, "..", "client", "public")));
 //     console.log("-----------");
 //     next();
 // });
+
+////////////////////////////////////////////////////////////////////////////
 
 app.get("/welcome", (req, res) => {
     if (req.session.userId) {
@@ -108,7 +119,7 @@ app.get("/api/users/last", (req, res) => {
 
 app.get("/api/users/search", (req, res) => {
     const { q } = req.query;
-    console.log("req params q: ", req.query);
+    // console.log("req params q: ", req.query);
     db.searchForUsers(q)
         .then((response) => {
             // console.log("get user response: ", response);
@@ -355,6 +366,53 @@ app.get("*", function (req, res) {
     }
 });
 
-app.listen(process.env.PORT || 3001, function () {
+server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
+});
+
+io.on("connection", (socket) => {
+    console.log(`socket with id ${socket.id} just connected`);
+    console.log("socket.request.session: ", socket.request.session);
+
+    if (!socket.request.session.userId) {
+        return socket.disconnect(true);
+    }
+
+    const userId = socket.request.session.userId;
+
+    socket.on("new chat message", (message) => {
+        db.addChatMessage(userId, message)
+            .then((result) => {
+                console.log("get add message result", result);
+                const { id, timestamp } = result.rows[0];
+                db.getUserById(userId)
+                    .then((result) => {
+                        console.log("get userId result", result);
+                        const { first, last, profile_pic } = result.rows[0];
+                        io.sockets.emit("new message and user", {
+                            id,
+                            message,
+                            first,
+                            last,
+                            profile_pic,
+                            timestamp,
+                        });
+                    })
+                    .catch((error) => {
+                        console.log("get user error", error);
+                    });
+            })
+            .catch((error) => {
+                console.log("add chat error", error);
+            });
+    });
+
+    db.getTenMostRecentMessages()
+        .then((result) => {
+            console.log("recent messages result: ", result);
+            socket.emit("10 most recent messages", result);
+        })
+        .catch((error) => {
+            console.log("get chat error", error);
+        });
 });

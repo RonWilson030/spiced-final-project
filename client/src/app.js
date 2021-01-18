@@ -6,6 +6,7 @@ import FindPeople from "./findpeople";
 import Friends from "./friends";
 import Uploader from "./uploader";
 import OtherProfile from "./otherprofile";
+import Chat from "./chat";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 // import BioEditor from "./bioeditor";
 
@@ -78,18 +79,21 @@ export default class App extends Component {
                 <div className="container">
                     <header className="header-section">
                         <img id="logo" src="link" alt="socialnetwork logo" />
+                        <div id="friends" className="hand-cursor">
+                            <Link to="/friends/">Friends</Link>
+                        </div>
+                        <div id="chat">
+                            <Link to="/chat/">Chat</Link>
+                        </div>
+                        <div id="find-friends" className="hand-cursor">
+                            <Link to="/users/">Find friends</Link>
+                        </div>
                         <ProfilePic
                             first={this.state.first}
                             last={this.state.last}
                             profilePic={this.state.profilePic || "/default.png"}
                             toggleUploader={this.toggleUploader}
                         />
-                        <div id="find-friends" className="hand-cursor">
-                            <Link to="/users/">Find friends</Link>
-                        </div>
-                        <div id="friends" className="hand-cursor">
-                            <Link to="/friends/">Friends</Link>
-                        </div>
                     </header>
 
                     <Route
@@ -124,6 +128,8 @@ export default class App extends Component {
                     <Route exact path="/users" render={() => <FindPeople />} />
 
                     <Route exact path="/friends" render={() => <Friends />} />
+
+                    <Route exact path="/chat" render={() => <Chat />} />
 
                     {this.state.uploaderIsVisible && (
                         <div id="overlay">

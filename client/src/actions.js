@@ -2,7 +2,7 @@ import axios from "./axios";
 
 export async function getFriends() {
     const { data } = await axios.get("/get-friends");
-    console.log("data get friendslist: ", data);
+    // console.log("data get friendslist: ", data);
     return {
         type: "GET_FRIENDS",
         user: data.friendsList,
@@ -29,12 +29,30 @@ export async function unfriend(otherUserId) {
         action: "Unfriend",
         otherUserId,
     });
-    console.log("data unfriend action: ", data);
-    console.log("unfriend otherUserId: ", otherUserId);
+    // console.log("data unfriend action: ", data);
+    // console.log("unfriend otherUserId: ", otherUserId);
     if (data.success) {
         return {
             type: "UNFRIEND",
             unfriendUser: otherUserId,
         };
     }
+}
+
+export async function postNewMessage(userAndMessage) {
+    console.log("userMessage: ", userAndMessage);
+
+    return {
+        type: "POST_NEW_MESSAGE",
+        userAndMessage: userAndMessage,
+    };
+}
+
+export async function addMostRecentMessages(recentMessages) {
+    console.log("recentMessage: ", recentMessages);
+
+    return {
+        type: "RECENT_MESSAGES",
+        recentMessages: recentMessages,
+    };
 }

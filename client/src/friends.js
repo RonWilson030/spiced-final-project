@@ -1,9 +1,7 @@
-// import Friendslist from "./friendslist";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getFriends, acceptRequest, unfriend } from "./actions";
-// import axios from "./axios";
 
 export default function Friends() {
     const dispatch = useDispatch();
@@ -44,7 +42,10 @@ export default function Friends() {
                                     {user.first} {user.last}
                                 </div>
                             </Link>
-                            <button onClick={() => dispatch(unfriend(user.id))}>
+                            <button
+                                className="button"
+                                onClick={() => dispatch(unfriend(user.id))}
+                            >
                                 Unfriend
                             </button>
                         </div>

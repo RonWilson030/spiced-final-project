@@ -21,12 +21,28 @@ export default function (state = {}, action) {
     }
 
     if (action.type == "UNFRIEND") {
-        console.log("reducer action unfriend log");
+        // console.log("reducer action unfriend log");
         state = {
             ...state,
             users: state.users.filter((user) => {
                 return user.id != action.unfriendUser;
             }),
+        };
+    }
+
+    if (action.type == "POST_NEW_MESSAGE") {
+        console.log("chat messages");
+        state = {
+            ...state,
+            chatMessages: [...state.chatMessages, action.userAndMessages],
+        };
+    }
+
+    if (action.type == "RECENT_MESSAGES") {
+        console.log("recent messages");
+        state = {
+            ...state,
+            chatMessages: action.recentMessages,
         };
     }
 
