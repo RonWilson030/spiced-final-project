@@ -42,37 +42,31 @@ export default function FindPeople() {
     // console.log("********* RENDERING <FindPeople /> *************");
     return (
         <div>
-            {/* {query && <div></div>} */}
-            <h2>Find your friends:</h2>
-            <input
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Friend..."
-            />
-            {/* <ul>
-                {users.map((user) => (
-                    <li
-                        className="hand-cursor"
-                        key={user.id}
-                        onClick={goToUserProfile}
-                    >
-                        {user.first}
-                        {user.last}
-                    </li>
-                ))}
-            </ul> */}
-            <h2>Recent friends:</h2>
-            <div>
-                {users.map((user) => (
-                    <Link to={`/users/${user.id}`} key={user.id}>
-                        <div>
-                            <img
-                                id="profile-avatar"
-                                src={user.profile_pic}
-                            ></img>
-                            {user.first} {user.last}
-                        </div>
-                    </Link>
-                ))}
+            <div id="finder-container">
+                <div id="finder-content">
+                    <h2>Find your friends:</h2>
+                    <input
+                        onChange={(e) => setQuery(e.target.value)}
+                        placeholder="search friend..."
+                    />
+                    <h2>Recent friends:</h2>
+                    <div>
+                        {users &&
+                            users.map((user) => (
+                                <Link to={`/users/${user.id}`} key={user.id}>
+                                    <div className="friends">
+                                        <img
+                                            id="friends-avatar"
+                                            src={user.profile_pic}
+                                        ></img>
+                                        <div id="name-style">
+                                            {user.first} {user.last}
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                    </div>
+                </div>
             </div>
         </div>
     );

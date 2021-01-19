@@ -49,7 +49,7 @@ export async function postNewMessage(userAndMessage) {
 }
 
 export async function addMostRecentMessages(recentMessages) {
-    console.log("recentMessage: ", recentMessages);
+    console.log("recentMessages: ", recentMessages);
 
     return {
         type: "RECENT_MESSAGES",

@@ -28,51 +28,68 @@ export default function Friends() {
 
     return (
         <div>
-            <div>
-                <h1>friends:</h1>
-                {friends &&
-                    friends.map((user) => (
-                        <div key={user.id}>
-                            <Link to={`/users/${user.id}`}>
-                                <div>
-                                    <img
-                                        id="profile-avatar"
-                                        src={user.profile_pic || "/default.png"}
-                                    ></img>
-                                    {user.first} {user.last}
+            <div id="friends-container">
+                <div id="friends-content">
+                    <div>
+                        {friends &&
+                            friends.map((user) => (
+                                <div key={user.id}>
+                                    <h1>Friends:</h1>
+                                    <Link to={`/users/${user.id}`}>
+                                        <div>
+                                            <img
+                                                id="friends-avatar"
+                                                src={
+                                                    user.profile_pic ||
+                                                    "/default.png"
+                                                }
+                                            ></img>
+                                            <div>
+                                                {user.first} {user.last}
+                                            </div>
+                                        </div>
+                                    </Link>
+                                    <button
+                                        className="button"
+                                        onClick={() =>
+                                            dispatch(unfriend(user.id))
+                                        }
+                                    >
+                                        Unfriend
+                                    </button>
                                 </div>
-                            </Link>
-                            <button
-                                className="button"
-                                onClick={() => dispatch(unfriend(user.id))}
-                            >
-                                Unfriend
-                            </button>
-                        </div>
-                    ))}
-            </div>
-
-            <div>
-                <h1>requests:</h1>
-                {wannabes &&
-                    wannabes.map((user) => (
-                        <div key={user.id}>
-                            <Link to={`/users/${user.id}`}>
-                                <div>
-                                    <img
-                                        id="profile-avatar"
-                                        src={user.profile_pic || "/default.png"}
-                                    ></img>
-                                    {user.first} {user.last}
-                                </div>
-                            </Link>
-                            <button
-                                onClick={() => dispatch(acceptRequest(user.id))}
-                            >
-                                Accept
-                            </button>
-                        </div>
-                    ))}
+                            ))}
+                    </div>
+                </div>
+                <div id="friends-content">
+                    {wannabes &&
+                        wannabes.map((user) => (
+                            <div key={user.id}>
+                                <h1>Requests:</h1>
+                                <Link to={`/users/${user.id}`}>
+                                    <div>
+                                        <img
+                                            id="friends-avatar"
+                                            src={
+                                                user.profile_pic ||
+                                                "/default.png"
+                                            }
+                                        ></img>
+                                        <div>
+                                            {user.first} {user.last}
+                                        </div>
+                                    </div>
+                                </Link>
+                                <button
+                                    onClick={() =>
+                                        dispatch(acceptRequest(user.id))
+                                    }
+                                >
+                                    Accept
+                                </button>
+                            </div>
+                        ))}
+                </div>
             </div>
         </div>
     );

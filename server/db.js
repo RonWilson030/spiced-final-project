@@ -145,7 +145,7 @@ module.exports.getFriends = (userId) => {
 
 module.exports.addChatMessage = (userId, message) => {
     return db.query(
-        `INSERT INTO chat_messages (user_id, messages)
+        `INSERT INTO chat_messages (user_id, message)
         VALUES ($1, $2)
         RETURNING id, timestamp`,
         [userId, message]
@@ -154,7 +154,14 @@ module.exports.addChatMessage = (userId, message) => {
 
 module.exports.getTenMostRecentMessages = () => {
     return db.query(
-        `SELECT chat_messages.id, chat_messages.messages, chat_messages.user_id, chat_messages.timestamp, users.id, users.first, users.last, users.profile_pic
+        `SELECT
+            chat_messages.id,
+            chat_messages.message,
+            chat_messages.user_id,
+            chat_messages.timestamp,
+            users.first,
+            users.last,
+            users.profile_pic
         FROM chat_messages
         JOIN users
         ON chat_messages.user_id = users.id

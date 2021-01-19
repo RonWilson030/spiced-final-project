@@ -42,34 +42,34 @@ export default class Uploader extends Component {
             });
     }
 
-    closeModal() {
-        // console.log(
-        //     "closeModal runs and about to emit an event from the component!!!!!!"
-        // );
-        this.props.toggleUploader();
-    }
-
     render() {
-        console.log("props in uploader: ", this.props);
+        // console.log("props in uploader: ", this.props);
         return (
-            <div className="uploader">
-                <img id="uploader-image" src={this.props.profilePic} />
-                <p>change profilepic?</p>
-                <input
-                    onChange={(e) => this.handleFileChange(e)}
-                    name="image"
-                    type="file"
-                    accept="image/*"
-                ></input>
-                <button
-                    className="hand-cursor"
-                    onClick={() => this.handleUpload()}
-                >
-                    upload
-                </button>
-                <p className="hand-cursor" onClick={() => this.closeModal()}>
-                    X
-                </p>
+            <div id="uploader">
+                <div id="uploader-container">
+                    <div>
+                        <img
+                            className="uploader-image"
+                            src={this.props.profilePic}
+                        />
+                    </div>
+                    <div>
+                        <input
+                            onChange={(e) => this.handleFileChange(e)}
+                            name="image"
+                            type="file"
+                            accept="image/*"
+                        ></input>
+                    </div>
+                    <div>
+                        <button
+                            className="hand-cursor"
+                            onClick={() => this.handleUpload()}
+                        >
+                            upload
+                        </button>
+                    </div>
+                </div>
             </div>
         );
     }

@@ -4,10 +4,12 @@ import Profile from "./profile";
 import ProfilePic from "./profilepic";
 import FindPeople from "./findpeople";
 import Friends from "./friends";
+import Menu from "./menu";
 import Uploader from "./uploader";
 import OtherProfile from "./otherprofile";
 import Chat from "./chat";
 import { BrowserRouter, Route, Link } from "react-router-dom";
+import Bio from "./bio";
 // import BioEditor from "./bioeditor";
 
 export default class App extends Component {
@@ -19,10 +21,12 @@ export default class App extends Component {
             last: "",
             profilePic: "" || "/default.png",
             bio: "",
-            uploaderIsVisible: false,
+            // uploaderIsVisible: false,
+            menuIsVisible: false,
         };
         this.setImage = this.setImage.bind(this);
-        this.toggleUploader = this.toggleUploader.bind(this);
+        // this.toggleUploader = this.toggleUploader.bind(this);
+        this.toggleMenu = this.toggleMenu.bind(this);
         this.setBio = this.setBio.bind(this);
     }
 
@@ -38,22 +42,28 @@ export default class App extends Component {
             .catch((err) => console.log("error receiving data", err));
     }
 
-    toggleUploader() {
-        // console.log("toggle uploader running!");
+    toggleMenu() {
         this.setState({
-            uploaderIsVisible: !this.state.uploaderIsVisible,
+            menuIsVisible: !this.state.menuIsVisible,
         });
-        // ALTERNATIVE WAY:
-        // if (!this.state.uploaderIsVisible) {
-        //     this.setState({
-        //         uploaderIsVisible: true,
-        //     });
-        // } else {
-        //     this.setState({
-        //         uploaderIsVisible: false,
-        //     });
-        // }
     }
+
+    // toggleUploader() {
+    //     // console.log("toggle uploader running!");
+    //     this.setState({
+    //         uploaderIsVisible: !this.state.uploaderIsVisible,
+    //     });
+    //     // ALTERNATIVE WAY:
+    //     // if (!this.state.uploaderIsVisible) {
+    //     //     this.setState({
+    //     //         uploaderIsVisible: true,
+    //     //     });
+    //     // } else {
+    //     //     this.setState({
+    //     //         uploaderIsVisible: false,
+    //     //     });
+    //     // }
+    // }
 
     setImage(profilePic) {
         // console.log("set image prop: ", profilePic);
@@ -78,11 +88,17 @@ export default class App extends Component {
             <BrowserRouter>
                 <div className="container">
                     <header className="header-section">
-                        <img id="logo" src="link" alt="socialnetwork logo" />
+                        <Link to="/">
+                            <img
+                                id="logo"
+                                src="link"
+                                alt="socialnetwork logo"
+                            />
+                        </Link>
                         <div id="friends" className="hand-cursor">
                             <Link to="/friends/">Friends</Link>
                         </div>
-                        <div id="chat">
+                        <div id="chat" className="hand-cursor">
                             <Link to="/chat/">Chat</Link>
                         </div>
                         <div id="find-friends" className="hand-cursor">
@@ -92,9 +108,17 @@ export default class App extends Component {
                             first={this.state.first}
                             last={this.state.last}
                             profilePic={this.state.profilePic || "/default.png"}
-                            toggleUploader={this.toggleUploader}
+                            toggleMenu={this.toggleMenu}
                         />
                     </header>
+
+                    <div id="menu">
+                        {this.state.menuIsVisible && (
+                            <div>
+                                <Menu toggleMenu={this.toggleMenu} />
+                            </div>
+                        )}
+                    </div>
 
                     <Route
                         exact
@@ -107,8 +131,6 @@ export default class App extends Component {
                                     this.state.profilePic || "/default.png"
                                 }
                                 bio={this.state.bio}
-                                setBio={this.setBio}
-                                toggleUploader={this.toggleUploader}
                             />
                         )}
                     />
@@ -131,17 +153,34 @@ export default class App extends Component {
 
                     <Route exact path="/chat" render={() => <Chat />} />
 
-                    {this.state.uploaderIsVisible && (
-                        <div id="overlay">
+                    <Route
+                        exact
+                        path="/bio"
+                        render={() => (
+                            <Bio
+                                first={this.state.first}
+                                last={this.state.last}
+                                profilePic={
+                                    this.state.profilePic || "/default.png"
+                                }
+                                bio={this.state.bio}
+                                setBio={this.setBio}
+                            />
+                        )}
+                    />
+
+                    <Route
+                        exact
+                        path="/uploader"
+                        render={() => (
                             <Uploader
                                 profilePic={
                                     this.state.profilePic || "default.png"
                                 }
                                 setImage={this.setImage}
-                                toggleUploader={this.toggleUploader}
                             />
-                        </div>
-                    )}
+                        )}
+                    />
                 </div>
             </BrowserRouter>
         );

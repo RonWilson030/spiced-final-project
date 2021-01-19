@@ -34,7 +34,7 @@ export default function (state = {}, action) {
         console.log("chat messages");
         state = {
             ...state,
-            chatMessages: [...state.chatMessages, action.userAndMessages],
+            messages: [...state.messages, action.userAndMessage],
         };
     }
 
@@ -42,7 +42,7 @@ export default function (state = {}, action) {
         console.log("recent messages");
         state = {
             ...state,
-            chatMessages: action.recentMessages,
+            messages: action.recentMessages,
         };
     }
 

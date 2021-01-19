@@ -1,8 +1,9 @@
 body {
-    background-color: ghostwhite;
+    background: rgba(250, 240, 30, 0.8);
 }
 
 header {
+    position: relative;
     background-color: lightblue;
     display: grid;
     flex-direction: column;
@@ -35,7 +36,20 @@ header #avatar {
     margin: -5px 0 0 -5px;
 }
 
-.find-friends {
+#menu {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    text-align: end;
+    right: 0;
+    padding: 1em;
+}
+
+.menu-container {
+}
+
+#close-menu {
+    cursor: pointer;
 }
 
 #profile-avatar {
@@ -43,7 +57,6 @@ header #avatar {
     width: 150px;
     height: 150px;
     padding: 5px;
-    /* margin: auto; */
 }
 
 #profile {
@@ -59,9 +72,6 @@ header #avatar {
     margin: auto;
 }
 
-#make-friends-button {
-}
-
 #bio-text {
     background-color: whitesmoke;
     width: 30em;
@@ -72,29 +82,119 @@ header #avatar {
     margin-right: auto;
 }
 
-.uploader {
-    position: absolute;
+#uploader {
     text-align: center;
-    top: 20%;
-    left: 50%;
-    background-color: yellowgreen;
-    box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
-    z-index: 1;
+    position: relative;
     padding: 1em;
     margin: auto;
 }
 
-#uploader-image {
-    width: 30em;
+#uploader-container {
+    justify-content: center;
 }
 
-.hand-cursor {
-    cursor: pointer;
+#chat {
+    text-align: center;
+    position: relative;
+    padding: 1em;
+    margin: auto;
+}
+
+.chat-container {
+    border: 2px solid black;
+}
+
+.chat-content {
+    text-align: left;
+    display: inline-block;
+    padding: 0.2em 1em 0.2em 5em;
+    position: relative;
+    width: 45%;
+    vertical-align: top;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.avatar {
+    position: absolute;
+    top: 0;
+    left: 0.5em;
+    object-fit: cover;
+    border-radius: 50px 50px;
+    width: 50px;
+    height: 50px;
+}
+
+.uploader-image {
+    object-fit: cover;
+    width: 300px;
+    height: 300px;
+    padding: 5px;
+}
+
+#friends-container {
+    text-align: center;
+    position: relative;
+    padding: 1em;
+    margin: auto;
+}
+
+#friends-content {
+    justify-content: center;
+}
+
+#finder-container {
+    text-align: center;
+    position: relative;
+    padding: 1em;
+    margin: auto;
+}
+
+#finder-content {
+    justify-content: center;
+}
+
+#friends-avatar {
+    object-fit: cover;
+    border-radius: 50px 50px;
+    width: 50px;
+    height: 50px;
+    padding: 5px;
+}
+
+.friends {
+    display: table-caption;
+    padding: 1em;
+}
+
+#name-style {
+    width: max-content;
+}
+
+#friendsname-style {
+    justify-content: center;
+}
+
+#welcome {
+    text-align: center;
+    position: relative;
+    padding: 1em;
+    margin: auto;
+}
+
+#registration {
+    text-align: center;
+    position: relative;
+    padding: 1em;
+    margin: auto;
+}
+
+#registration-container {
+    justify-content: center;
 }
 
 button {
     cursor: pointer;
-    border: none;
     padding: 0.2em;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -105,4 +205,8 @@ button {
 
 button:hover {
     color: tomato;
+}
+
+.hand-cursor {
+    cursor: pointer;
 }

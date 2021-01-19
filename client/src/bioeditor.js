@@ -6,6 +6,7 @@ export default class BioEditor extends Component {
         this.state = {
             textareaVisible: false,
             bioEditorIsVisible: false,
+            // bio: "",
             draftBio: "",
             editMode: false,
             editButtonVisible: false,
@@ -66,34 +67,39 @@ export default class BioEditor extends Component {
 
         return (
             <div>
-                {this.state.editMode ? (
-                    <div>
+                <div>{this.props.bio}</div>
+                <div>
+                    {this.state.editMode ? (
+                        <div>
+                            <button
+                                className="hand-cursor"
+                                onClick={() => this.saveBio()}
+                            >
+                                save bio
+                            </button>
+                            <div>
+                                <textarea
+                                    value={this.state.draftBio}
+                                    onChange={(e) => this.handleTextChange(e)}
+                                />
+                            </div>
+                        </div>
+                    ) : !this.props.currentBio ? (
                         <button
                             className="hand-cursor"
-                            onClick={() => this.saveBio()}
+                            onClick={() => this.setEditMode(true)}
                         >
-                            save bio
+                            add bio
                         </button>
-                        <textarea
-                            value={this.state.draftBio}
-                            onChange={(e) => this.handleTextChange(e)}
-                        />
-                    </div>
-                ) : !this.props.currentBio ? (
-                    <button
-                        className="hand-cursor"
-                        onClick={() => this.setEditMode(true)}
-                    >
-                        add bio
-                    </button>
-                ) : (
-                    <button
-                        className="hand-cursor"
-                        onClick={() => this.setEditMode(true)}
-                    >
-                        edit bio
-                    </button>
-                )}
+                    ) : (
+                        <button
+                            className="hand-cursor"
+                            onClick={() => this.setEditMode(true)}
+                        >
+                            edit bio
+                        </button>
+                    )}
+                </div>
             </div>
         );
     }

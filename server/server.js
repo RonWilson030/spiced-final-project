@@ -358,6 +358,11 @@ app.get("/get-friends", (req, res) => {
         });
 });
 
+app.get("/logout", (req, res) => {
+    req.session = null;
+    res.redirect("/welcome");
+});
+
 app.get("*", function (req, res) {
     if (!req.session.userId) {
         res.redirect("/welcome");
@@ -408,9 +413,9 @@ io.on("connection", (socket) => {
     });
 
     db.getTenMostRecentMessages()
-        .then((result) => {
-            console.log("recent messages result: ", result);
-            socket.emit("10 most recent messages", result);
+        .then(({ rows: messages }) => {
+            console.log("recent messages result: ", messages);
+            socket.emit("10 most recent messages", messages);
         })
         .catch((error) => {
             console.log("get chat error", error);

@@ -1,5 +1,6 @@
 export default function ProfilePic({
-    toggleUploader,
+    toggleMenu,
+    // toggleUploader,
     profilePic,
     first,
     last,
@@ -11,7 +12,8 @@ export default function ProfilePic({
             <img
                 id="avatar"
                 className="hand-cursor"
-                onClick={toggleUploader}
+                // onClick={toggleUploader}
+                onClick={toggleMenu}
                 src={profilePic}
                 alt={`${first} ${last}`}
             />

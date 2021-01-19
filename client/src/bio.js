@@ -1,4 +1,6 @@
-export default function Profile({
+import BioEditor from "./bioeditor";
+
+export default function Bio({
     profilePic,
     first,
     last,
@@ -21,6 +23,7 @@ export default function Profile({
                     {first} {last}
                 </div>
                 <div id="bio-text">{bio}</div>
+                <BioEditor currentBio={bio} setBio={setBio} />
             </div>
         </div>
     );

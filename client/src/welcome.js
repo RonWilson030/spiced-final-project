@@ -7,7 +7,7 @@ import ResetPassword from "./resetpassword";
 
 export default function Welcome() {
     return (
-        <div>
+        <div id="welcome">
             <h1>Welcome!</h1>
             <img src="/logo.png" />
             <HashRouter>
