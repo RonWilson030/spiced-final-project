@@ -26,10 +26,14 @@ export default class Menu extends Component {
     }
 
     handleLogout() {
+        // localStorage.clear();
+        // window.location.href = "/login";
+
         axios
             .get("/logout/")
             .then((response) => {
                 console.log("logout response: ", response);
+                window.location.href = "/";
             })
             .catch((err) => {
                 console.log(err);
@@ -47,12 +51,12 @@ export default class Menu extends Component {
                     <Link to="/bio/">Edit Bio</Link>
                 </div>
                 <div>
-                    <div
+                    <Link
                         className="hand-cursor"
                         onClick={() => this.handleLogout()}
                     >
                         Logout
-                    </div>
+                    </Link>
                 </div>
             </div>
         );

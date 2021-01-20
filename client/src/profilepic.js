@@ -1,23 +1,16 @@
-export default function ProfilePic({
-    toggleMenu,
-    // toggleUploader,
-    profilePic,
-    first,
-    last,
-}) {
+export default function ProfilePic({ toggleMenu, profilePic, first, last }) {
     // console.log("props in profilepic: ", first, last, url);
 
     return (
-        <div>
+        <>
             <img
                 id="avatar"
                 className="hand-cursor"
-                // onClick={toggleUploader}
                 onClick={toggleMenu}
                 src={profilePic}
                 alt={`${first} ${last}`}
             />
-        </div>
+        </>
     );
 }
 

@@ -15,8 +15,6 @@ export default class Login extends Component {
     }
 
     handleChange(e) {
-        // console.log("e.target.value: ", e.target.value);
-        // console.log("e.target.name: ", e.target.name);
         this.setState(
             {
                 [e.target.name]: e.target.value,
@@ -26,7 +24,6 @@ export default class Login extends Component {
     }
 
     handleClick() {
-        // console.log("click!");
         axios
             .post("/login", this.state)
             .then((response) => {

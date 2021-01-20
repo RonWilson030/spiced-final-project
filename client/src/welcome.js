@@ -8,8 +8,12 @@ import ResetPassword from "./resetpassword";
 export default function Welcome() {
     return (
         <div id="welcome">
-            <h1>Welcome!</h1>
-            <img src="/logo.png" />
+            <h1>SO CHILL, NOT WORK!</h1>
+            <img
+                id="welcome-logo"
+                src="http://spontaneoussmiley.com/wp-content/uploads/2011/01/Iconic-Yellow-Smiley.png"
+                alt="socialnetwork logo"
+            />
             <HashRouter>
                 <div>
                     <Route exact path="/" component={Registration} />

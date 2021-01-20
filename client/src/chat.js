@@ -46,7 +46,6 @@ export default function Chat() {
                                         {messenger.first} {messenger.last}{" "}
                                         posted on{" "}
                                         {toDateString(messenger.timestamp)}{" "}
-                                        {":"}
                                         <div>
                                             {'"'}
                                             {messenger.message}

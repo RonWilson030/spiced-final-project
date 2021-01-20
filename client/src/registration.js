@@ -83,16 +83,16 @@ export default class Registration extends Component {
                         placeholder="password"
                         type="password"
                     ></input>
-                    <div>
+                    <>
                         <button onClick={() => this.handleClick()}>
-                            register
+                            Register
                         </button>
-                    </div>
-                    <div>
+                    </>
+                    <>
                         <p>
                             Already a member? <Link to="/login">Log in!</Link>
                         </p>
-                    </div>
+                    </>
                 </div>
             </div>
         );

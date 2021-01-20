@@ -1,5 +1,22 @@
+* {
+    font-family: Didot, serif;
+}
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 body {
-    background: rgba(250, 240, 30, 0.8);
+    height: 100%;
+    background: rgba(240, 235, 25);
+}
+
+#welcome-logo {
+    width: 200px;
+    height: 200px;
+}
+
+#container {
 }
 
 header {
@@ -11,6 +28,7 @@ header {
     gap: 5px;
     height: 50px;
     padding: 1em;
+    margin: 1em;
 }
 
 .header-section div {
@@ -37,19 +55,17 @@ header #avatar {
 }
 
 #menu {
-    position: relative;
+    position: absolute;
     display: flex;
     justify-content: flex-end;
+    z-index: 1;
     text-align: end;
     right: 0;
-    padding: 1em;
-}
-
-.menu-container {
-}
-
-#close-menu {
-    cursor: pointer;
+    padding-top: 0;
+    padding-bottom: 1em;
+    padding-right: 1em;
+    padding-left: 1em;
+    margin-right: 1em;
 }
 
 #profile-avatar {
@@ -57,19 +73,26 @@ header #avatar {
     width: 150px;
     height: 150px;
     padding: 5px;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 2em;
+    margin-left: auto;
 }
 
 #profile {
-    background-color: tomato;
+    /* background-color: tomato; */
     display: flex;
     justify-content: center;
     padding: 1em;
-    margin: auto;
+    margin: 1em;
 }
 
 #profile-info {
     padding: 1em;
-    margin: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: auto;
+    margin-left: 2em;
 }
 
 #bio-text {
@@ -167,6 +190,12 @@ header #avatar {
     padding: 1em;
 }
 
+.friends-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
 #name-style {
     width: max-content;
 }
@@ -193,6 +222,11 @@ header #avatar {
     justify-content: center;
 }
 
+input {
+    padding: 0.2em;
+    margin: 0.5em;
+}
+
 button {
     cursor: pointer;
     padding: 0.2em;
@@ -207,6 +241,23 @@ button:hover {
     color: tomato;
 }
 
+a {
+    transition: all 0.3s;
+}
+
+a:hover {
+    color: tomato;
+}
+
 .hand-cursor {
     cursor: pointer;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    font-size: 1em;
+    text-align: end;
+    padding-top: 1em;
+    margin-bottom: auto;
 }

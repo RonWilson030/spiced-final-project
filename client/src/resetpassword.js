@@ -16,8 +16,6 @@ export default class ResetPassword extends Component {
     }
 
     handleChange(e) {
-        // console.log("e.target.value: ", e.target.value);
-        // console.log("e.target.name: ", e.target.name);
         this.setState(
             {
                 [e.target.name]: e.target.value,
@@ -27,7 +25,6 @@ export default class ResetPassword extends Component {
     }
 
     handleResetClick() {
-        // console.log("click!");
         axios
             .post("/password/reset", this.state)
             .then((response) => {
@@ -94,7 +91,7 @@ export default class ResetPassword extends Component {
                         type="text"
                     ></input>
                     <button onClick={() => this.handleResetClick()}>
-                        submit
+                        Submit
                     </button>
                 </div>
             );
@@ -117,7 +114,7 @@ export default class ResetPassword extends Component {
                         type="password"
                     ></input>
                     <button onClick={() => this.handleSubmitCode()}>
-                        submit
+                        Submit
                     </button>
                 </div>
             );

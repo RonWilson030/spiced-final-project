@@ -19,9 +19,9 @@ export default function Bio({
                 alt={`${first} ${last}`}
             />
             <div id="profile-info">
-                <div>
+                <>
                     {first} {last}
-                </div>
+                </>
                 <div id="bio-text">{bio}</div>
                 <BioEditor currentBio={bio} setBio={setBio} />
             </div>

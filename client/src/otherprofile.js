@@ -40,7 +40,7 @@ export default class OtherProfile extends Component {
 
     render() {
         return (
-            <div>
+            <>
                 <div id="profile">
                     <img
                         id="profile-avatar"
@@ -49,9 +49,9 @@ export default class OtherProfile extends Component {
                         alt={`${this.state.first} ${this.state.last}`}
                     />
                     <div id="profile-info">
-                        <div>
+                        <>
                             {this.state.first} {this.state.last}
-                        </div>
+                        </>
                         <div id="bio-text">{this.state.bio}</div>
                         <div id="make-friends-button">
                             <FriendshipButton
@@ -61,7 +61,7 @@ export default class OtherProfile extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </>
         );
     }
 }

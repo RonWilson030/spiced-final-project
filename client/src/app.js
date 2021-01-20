@@ -86,15 +86,17 @@ export default class App extends Component {
         // if (!id) {return null;}
         return (
             <BrowserRouter>
-                <div className="container">
+                <div id="container">
                     <header className="header-section">
-                        <Link to="/">
-                            <img
-                                id="logo"
-                                src="link"
-                                alt="socialnetwork logo"
-                            />
-                        </Link>
+                        <div>
+                            <Link to="/">
+                                <img
+                                    id="avatar"
+                                    src="http://spontaneoussmiley.com/wp-content/uploads/2011/01/Iconic-Yellow-Smiley.png"
+                                    alt="socialnetwork logo"
+                                />
+                            </Link>
+                        </div>
                         <div id="friends" className="hand-cursor">
                             <Link to="/friends/">Friends</Link>
                         </div>
@@ -181,6 +183,9 @@ export default class App extends Component {
                             />
                         )}
                     />
+                </div>
+                <div>
+                    <footer>So Chill, Not Work (c) | 2020</footer>
                 </div>
             </BrowserRouter>
         );

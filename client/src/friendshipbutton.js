@@ -49,11 +49,11 @@ export default function FriendshipButton({ userId, otherUserId }) {
     };
 
     return (
-        <div>
-            <div>
+        <>
+            <>
                 <button onClick={handleClick}>{buttonText}</button>
-            </div>
-        </div>
+            </>
+        </>
     );
 }
 

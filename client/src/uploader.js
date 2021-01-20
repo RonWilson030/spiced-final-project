@@ -50,7 +50,7 @@ export default class Uploader extends Component {
                     <div>
                         <img
                             className="uploader-image"
-                            src={this.props.profilePic}
+                            src={this.props.profilePic || "/default.png"}
                         />
                     </div>
                     <div>
@@ -66,7 +66,7 @@ export default class Uploader extends Component {
                             className="hand-cursor"
                             onClick={() => this.handleUpload()}
                         >
-                            upload
+                            Upload
                         </button>
                     </div>
                 </div>

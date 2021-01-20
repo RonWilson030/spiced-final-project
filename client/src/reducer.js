@@ -1,4 +1,29 @@
-export default function (state = {}, action) {
+const INITIAL_STATE = {
+    users: [],
+    messages: [],
+};
+
+// const users = (state = [], action) => {
+//     const { type } = action;
+
+//     switch (type) {
+//         case "ACCEPT_REQUEST": {
+//             return state.users.map((user) => {
+//                 if (user.id == action.acceptUser) {
+//                     return { ...user, accepted: true };
+//                 } else {
+//                     return user;
+//                 }
+//             });
+//         }
+//         default:
+//             return state;
+//     }
+// };
+
+// export default combinedReducers({ users })
+
+export default function (state = INITIAL_STATE, action) {
     if (action.type == "GET_FRIENDS") {
         state = {
             ...state,
@@ -48,28 +73,3 @@ export default function (state = {}, action) {
 
     return state;
 }
-
-// const obj = {
-//     first: "Ron",
-// };
-
-// const newObj = {
-//     ...obj,
-//     last: "Wilson",
-// };
-
-// if (action.type == "MAKE_HOT") {
-//     state = {
-//         ...state,
-//         users: state.users.map((user) => {
-//             if (user.id == action.id) {
-//                 return {
-//                     ...user,
-//                     hot: true,
-//                 };
-//             } else {
-//                 return user;
-//             }
-//         }),
-//     };
-// }

@@ -5,15 +5,14 @@ import axios from "./axios";
 export default function FindPeople() {
     const [users, setUsers] = useState([]);
     const [query, setQuery] = useState("");
+    const [recents, setRecents] = useState([]);
 
     useEffect(() => {
         // const otherUserId = this.props.match.params.id;
         axios
             .get("/api/users/last")
             .then((response) => {
-                // console.log("users response", response);
-                // console.log("users response: ", response.data);
-                setUsers(response.data);
+                setRecents(response.data);
             })
             .catch((err) => console.log(err));
     }, []);
@@ -29,7 +28,6 @@ export default function FindPeople() {
         (async () => {
             const { data } = await axios.get(`/api/users/search/?q=${query}`);
             if (!abort) {
-                // console.log("response data: ", data);
                 setUsers(data);
             }
         })();
@@ -39,7 +37,6 @@ export default function FindPeople() {
         };
     }, [query]);
 
-    // console.log("********* RENDERING <FindPeople /> *************");
     return (
         <div>
             <div id="finder-container">
@@ -49,7 +46,6 @@ export default function FindPeople() {
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder="search friend..."
                     />
-                    <h2>Recent friends:</h2>
                     <div>
                         {users &&
                             users.map((user) => (
@@ -57,7 +53,31 @@ export default function FindPeople() {
                                     <div className="friends">
                                         <img
                                             id="friends-avatar"
-                                            src={user.profile_pic}
+                                            src={
+                                                user.profile_pic ||
+                                                "/default.png"
+                                            }
+                                        ></img>
+                                        <div id="name-style">
+                                            {user.first} {user.last}
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                    </div>
+
+                    <div>
+                        <h2>Recent members:</h2>
+                        {recents &&
+                            recents.map((user) => (
+                                <Link to={`/users/${user.id}`} key={user.id}>
+                                    <div className="friends">
+                                        <img
+                                            id="friends-avatar"
+                                            src={
+                                                user.profile_pic ||
+                                                "/default.png"
+                                            }
                                         ></img>
                                         <div id="name-style">
                                             {user.first} {user.last}

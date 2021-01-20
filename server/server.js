@@ -106,7 +106,6 @@ app.get("/api/users", (req, res) => {
 });
 
 app.get("/api/users/last", (req, res) => {
-    // const userId = req.session.userId;
     db.getLastUsers()
         .then((response) => {
             // console.log("get users response: ", response);
@@ -243,7 +242,6 @@ app.post("/password/reset", (req, res) => {
 app.post("/password/reset/code", (req, res) => {
     // console.log("req body: ", req.body);
     const { email, code, newpassword } = req.body;
-    // const userId = req.session.userId;
     db.getCode(code).then((getCodeResult) => {
         // console.log("get code result: ", getCodeResult);
         if (getCodeResult.rows.length === 1 && newpassword) {
@@ -266,8 +264,6 @@ app.post("/password/reset/code", (req, res) => {
 });
 
 app.post("/uploader", uploader.single("image"), s3.upload, (req, res) => {
-    // console.log("req body: ", req.body);
-    // console.log("file: ", req.file);
     const userId = req.session.userId;
     const url = s3Url + req.file.filename;
     db.updateProfilePic(userId, url)
@@ -346,7 +342,6 @@ app.post("/friendship/action", (req, res) => {
 });
 
 app.get("/get-friends", (req, res) => {
-    // console.log();
     const userId = req.session.userId;
     db.getFriends(userId)
         .then((result) => {
@@ -360,7 +355,6 @@ app.get("/get-friends", (req, res) => {
 
 app.get("/logout", (req, res) => {
     req.session = null;
-    res.redirect("/welcome");
 });
 
 app.get("*", function (req, res) {

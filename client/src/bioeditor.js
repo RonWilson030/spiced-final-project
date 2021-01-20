@@ -24,23 +24,6 @@ export default class BioEditor extends Component {
         );
     }
 
-    // toggleTextarea() {
-    //     // if (this.props.currentBio === null) {
-    //     //     this.setState({
-    //     //         textareaVisible: !this.state.textareaVisible,
-    //     //         addButtonVisible: !this.state.addButtonVisible,
-    //     //         saveButtonVisible: !this.state.saveButtonVisible,
-    //     //     });
-    //     // } else {
-    //     this.setState({
-    //         draftBio: this.props.currentBio,
-    //         textareaVisible: !this.state.textareaVisible,
-    //         editButtonVisible: !this.state.editButtonVisible,
-    //         saveButtonVisible: !this.state.saveButtonVisible,
-    //     });
-    //     // }
-    // }
-
     setEditMode(value) {
         this.setState({
             editMode: value,
@@ -105,6 +88,22 @@ export default class BioEditor extends Component {
     }
 }
 
+// toggleTextarea() {
+//     // if (this.props.currentBio === null) {
+//     //     this.setState({
+//     //         textareaVisible: !this.state.textareaVisible,
+//     //         addButtonVisible: !this.state.addButtonVisible,
+//     //         saveButtonVisible: !this.state.saveButtonVisible,
+//     //     });
+//     // } else {
+//     this.setState({
+//         draftBio: this.props.currentBio,
+//         textareaVisible: !this.state.textareaVisible,
+//         editButtonVisible: !this.state.editButtonVisible,
+//         saveButtonVisible: !this.state.saveButtonVisible,
+//     });
+//     // }
+// }
 //  <div>
 //      <h4>bio editor</h4>
 //      {this.state.textareaVisible && (
