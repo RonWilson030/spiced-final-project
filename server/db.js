@@ -138,7 +138,6 @@ module.exports.getFriends = (userId) => {
         [userId]
     );
 };
-// check getFriends!! users.first?
 
 module.exports.addFavourites = (title, imageUrl, url, favouriteId) => {
     return db.query(
@@ -264,5 +263,14 @@ module.exports.getMessages = () => {
         FROM chat_messages
         JOIN users
         ON chat_messages.user_id = users.id`
+    );
+};
+
+module.exports.getUsersByIds = (arrayOfIds) => {
+    return db.query(
+        `SELECT id, first, last, profile_pic
+        FROM users
+        WHERE id = ANY($1)`,
+        [arrayOfIds]
     );
 };

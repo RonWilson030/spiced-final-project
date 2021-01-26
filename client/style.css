@@ -10,6 +10,7 @@
 
 html {
     position: relative;
+    /* background: rgb(108, 195, 224); */
     min-height: 100%;
 }
 
@@ -24,7 +25,21 @@ body {
     height: 200px;
 }
 
+.init-container {
+    text-align: center;
+}
+
+.cover-img {
+    height: 500px;
+    box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    /* margin-top: 3em; */
+    /* margin-right: 3em; */
+}
+
 .main-container {
+    background: rgb(196, 136, 252);
+    /* height: 100vh; */
     padding: 2em;
     margin: auto;
 }
@@ -32,6 +47,7 @@ body {
 header {
     position: relative;
     background-color: rgb(108, 195, 224);
+    border: 4px solid rgb(132, 0, 255);
     display: grid;
     flex-direction: column;
     grid-template-columns: repeat(7, 1fr);
@@ -68,23 +84,9 @@ header #avatar {
     margin: -5px 0 0 -5px;
 }
 
-#menu {
-    position: absolute;
-    display: flex;
-    justify-content: flex-end;
-    z-index: 1;
-    text-align: end;
-    right: 0;
-    padding-top: 0;
-    padding-bottom: 1em;
-    padding-right: 1em;
-    padding-left: 1em;
-    margin-right: 1em;
-}
-
 .profile-container {
     display: flex;
-    /* justify-content: center; */
+    width: fit-content;
     border: 4px solid rgb(108, 195, 224);
     border-radius: 3px;
     padding: 1em;
@@ -105,21 +107,13 @@ header #avatar {
     margin-left: auto;
 }
 
-#profile {
-    /* background-color: tomato; */
-    /* display: flex; */
-    /* justify-content: center;
-    padding: 1em;
-    margin: 1em; */
-}
-
-#profile-info {
+/* #profile-info {
     padding: 1em;
     margin-top: auto;
     margin-bottom: auto;
     margin-right: auto;
     margin-left: 2em;
-}
+} */
 
 .profile-content {
     padding: 1em;
@@ -134,16 +128,6 @@ header #avatar {
     margin: auto;
 }
 
-/* #bio-text {
-    background-color: whitesmoke;
-    width: 30em;
-    padding: 1em;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: auto;
-    margin-right: auto;
-} */
-
 #uploader {
     text-align: center;
     position: relative;
@@ -151,19 +135,12 @@ header #avatar {
     margin: auto;
 }
 
-#uploader-container {
+/* #uploader-container {
     justify-content: center;
-}
-
-/* #chat {
-    text-align: center;
-    position: relative;
-    padding: 1em;
-    margin: auto;
 } */
 
 .chat-container {
-    border: 4px solid rgb(108, 195, 224);
+    /* border: 4px solid rgb(108, 195, 224); */
     border-radius: 3px;
     text-align: center;
     margin-right: auto;
@@ -177,16 +154,41 @@ header #avatar {
     display: inline-block;
     padding: 0.2em 1em 0.2em 5em;
     position: relative;
-    width: 45%;
+    width: 50%;
     vertical-align: top;
     margin-top: 1em;
     margin-bottom: 1em;
+}
+
+.chat-wrapper {
+    background-color: rgb(108, 195, 224);
+    /* border: 4px solid rgb(108, 195, 224); */
+    border-radius: 3px;
+    box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.5);
+    width: auto;
+    margin: 1em;
 }
 
 .chat-messenger {
     display: grid;
     justify-content: center;
     text-align: center;
+}
+
+.online-users-container {
+    display: flex;
+    align-items: center;
+    padding: 0.5em;
+    margin: 1em;
+}
+
+.online-avatar {
+    object-fit: cover;
+    border-radius: 50px 50px;
+    width: 50px;
+    height: 50px;
+    padding: 0.5em;
+    margin: auto;
 }
 
 .avatar {
@@ -199,11 +201,46 @@ header #avatar {
     height: 50px;
 }
 
+.uploader-container {
+    position: fixed;
+    overflow: auto;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2;
+}
+
+.uploader-content {
+    overflow: auto;
+    text-align: center;
+    box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
+    position: relative;
+    background-color: rgb(108, 195, 224);
+    border-radius: 3px;
+    width: 500px;
+    padding: 1em;
+    top: 5%;
+    margin: auto;
+}
+
 .uploader-image {
     object-fit: cover;
     width: 300px;
     height: 300px;
     padding: 5px;
+}
+
+.uploader-file {
+    display: flex;
+    justify-content: center;
+}
+
+.uploader-close {
+    display: flex;
+    justify-content: flex-end;
+    margin: auto;
 }
 
 .recipes-container {
@@ -228,9 +265,6 @@ header #avatar {
     justify-content: space-between;
     flex-direction: column;
     text-align: center;
-    /* border: 2px solid black; */
-    /* box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.5); */
-    /* width: 100%; */
     height: 100%;
     padding: 0.5em;
 }
@@ -243,25 +277,30 @@ header #avatar {
     box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.5);
 }
 
-#friends-container {
+.friends-container {
     text-align: center;
     position: relative;
     padding: 1em;
     margin: auto;
 }
 
-#friends-content {
+.friends-content {
     justify-content: center;
 }
 
-#finder-container {
+.friendship-button {
+    display: flex;
+    justify-content: center;
+}
+
+.finder-container {
     text-align: center;
     position: relative;
     padding: 1em;
     margin: auto;
 }
 
-#finder-content {
+.finder-content {
     justify-content: center;
 }
 
@@ -284,7 +323,7 @@ header #avatar {
     margin: auto;
 }
 
-#name-style {
+.name-style {
     width: max-content;
 }
 
@@ -292,30 +331,51 @@ header #avatar {
     justify-content: center;
 }
 
-#welcome {
-    text-align: center;
+.welcome-container {
+    /* text-align: center; */
     position: relative;
-    padding: 1em;
+    display: flex;
+    justify-content: center;
+    /* padding: 1em; */
     margin: auto;
+}
+
+.welcome-wrapper {
+    text-align: center;
 }
 
 #registration {
     text-align: center;
     position: relative;
     padding: 1em;
-    margin: auto;
 }
 
 .registration-container {
     display: grid;
     justify-content: center;
     gap: 0.5em;
+    padding: 2em;
+    margin: auto;
+}
+
+#login {
+    text-align: center;
+    position: relative;
+    padding: 1em;
 }
 
 .login-container {
     display: grid;
     justify-content: center;
     gap: 0.5em;
+    padding: 2em;
+    margin: auto;
+}
+
+#reset {
+    text-align: center;
+    position: relative;
+    padding: 1em;
 }
 
 .shoppinglist-container {
@@ -326,6 +386,7 @@ header #avatar {
     padding: 1em;
     margin: auto;
 }
+
 .shoppinglist-content {
     display: grid;
     justify-content: center;
@@ -355,6 +416,9 @@ header #avatar {
 }
 
 input {
+    box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    border: none;
     padding: 0.2em;
     margin: 0.5em;
 }
@@ -367,7 +431,7 @@ button {
     box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.3);
     height: fit-content;
     cursor: pointer;
-    padding: 0.2em;
+    /* padding: 0.2em; */
     margin-top: 0.5em;
     margin-bottom: 0.5em;
     margin-left: 0.2em;
@@ -380,16 +444,12 @@ button {
 }
 
 button:hover {
-    background-color: rgb(108, 195, 224);
+    background-color: rgb(243, 236, 24);
 }
 
 ul {
     margin: 0.1em;
 }
-/* 
-li {
-    display: grid;
-} */
 
 .list-btn {
     margin-left: 1em;
@@ -397,15 +457,13 @@ li {
 }
 
 a {
-    /* font-size: 1.4em; */
     color: inherit;
     text-decoration: none;
-    /* padding: 0.2em; */
     transition: all 0.7s;
 }
 
 a:hover {
-    color: whitesmoke;
+    color: rgb(243, 236, 24);
 }
 
 .hand-cursor {
@@ -418,10 +476,26 @@ a:hover {
 
 footer {
     position: absolute;
-    background-color: rgb(108, 195, 224);
     border-radius: 3px;
     bottom: 0.2em;
-    font-size: 1em;
+    font-size: 0.8em;
     padding: 0.2em;
     margin-bottom: 0em;
 }
+
+/* @media (max-width: 840px) {
+    body {
+        width: auto;
+    }
+
+    header {
+        grid-template-rows: repeat(7, 1fr);
+    }
+
+    .recipes-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em;
+    padding: 10px;
+}
+} */

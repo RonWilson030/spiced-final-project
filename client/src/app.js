@@ -6,6 +6,7 @@ import Friends from "./friends";
 // import Uploader from "./uploader";
 import OtherProfile from "./otherprofile";
 import Chat from "./chat";
+import Init from "./init";
 import ShoppingList from "./shoppingList";
 import SearchRecipes from "./searchRecipes";
 import { BrowserRouter, Route, Link } from "react-router-dom";
@@ -20,10 +21,8 @@ export default class App extends Component {
             profilePic: "" || "/default.png",
             bio: "",
             favourites: "",
-            // uploaderIsVisible: false,
         };
         this.setImage = this.setImage.bind(this);
-        // this.toggleUploader = this.toggleUploader.bind(this);
         this.setBio = this.setBio.bind(this);
     }
 
@@ -38,13 +37,6 @@ export default class App extends Component {
             })
             .catch((err) => console.log("error receiving data", err));
     }
-
-    // toggleUploader() {
-    //     // console.log("toggle uploader running!");
-    //     this.setState({
-    //         uploaderIsVisible: !this.state.uploaderIsVisible,
-    //     });
-    // }
 
     setImage(profilePic) {
         // console.log("set image prop: ", profilePic);
@@ -78,6 +70,9 @@ export default class App extends Component {
             <BrowserRouter>
                 <div className="main-container">
                     <header className="header-section">
+                        {/* <div>
+                            <h1>APPETITE!</h1>
+                        </div> */}
                         <div>
                             <ProfilePic
                                 first={this.state.first}
@@ -179,18 +174,7 @@ export default class App extends Component {
 
                     <Route exact path="/extras" render={() => <Extras />} />
 
-                    {/* <Route
-                        exact
-                        path="/uploader"
-                        render={() => (
-                            <Uploader
-                                profilePic={
-                                    this.state.profilePic || "default.png"
-                                }
-                                setImage={this.setImage}
-                            />
-                        )}
-                    /> */}
+                    <Route exact path="/" render={() => <Init />} />
                 </div>
                 <div>
                     <footer>APPetite (c) | 2021</footer>

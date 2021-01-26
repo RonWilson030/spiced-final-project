@@ -26,12 +26,13 @@ export default function Profile({
                     className="profile-avatar hand-cursor"
                     src={profilePic || "/default.png"}
                     alt={`${first} ${last}`}
-                    onClick={() => toggleUploader()}
+                    onClick={toggleUploader}
                 />
                 {uploaderIsVisible && (
                     <Uploader
                         profilePic={profilePic || "default.png"}
                         setImage={setImage}
+                        toggleUploader={toggleUploader}
                     />
                 )}
                 <div className="profile-content">

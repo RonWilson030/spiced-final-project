@@ -489,7 +489,7 @@ app.get("/api/shoppinglist/add", async (req, res) => {
     try {
         const addItemResult = await db.addListItem(userId, item);
         console.log("add listitem result: ", addItemResult);
-        res.send();
+        res.json(addItemResult.rows[0]);
     } catch (error) {
         console.log("get listitem error", error);
     }
@@ -567,15 +567,63 @@ server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening.");
 });
 
-io.on("connection", (socket) => {
+let onlineUsers = {};
+const onlineUserCounters = {};
+
+io.on("connection", async (socket) => {
     console.log(`socket with id ${socket.id} just connected`);
     console.log("socket.request.session: ", socket.request.session);
 
-    if (!socket.request.session.userId) {
+    const userId = socket.request.session.userId;
+
+    if (!userId) {
         return socket.disconnect(true);
     }
 
-    const userId = socket.request.session.userId;
+    onlineUsers[socket.id] = userId;
+    onlineUserCounters[userId] = (onlineUserCounters[userId] || 0) + 1;
+
+    // console.log("online users: ", onlineUsers);
+
+    const onlineUsers = Object.keys(onlineUserCounters).filter(
+        (id) => id !== userId
+    );
+
+    if (onlineUserCounters[userId] === 1) {
+        const userResult = await db.getUsersByIds([userId]);
+
+        socket.broadcast.emit("user joined", userResult.rows[0]);
+    }
+
+    if (onlineUsers) {
+        const usersResult = await db.getUsersByIds(onlineUsers);
+        socket.emit("online users", usersResult.rows);
+    }
+
+    // submit to userId: socket.emit("online users", onlineUsers)
+
+    // filter usersOnline
+    // filer userJoined
+
+    // if (usersOnline)
+    // db.getUsersByIds(usersOnline)
+    // onlineUsers: result.rows
+    // socket.emit("online users", onlineUsers)
+
+    // if (userJoined.length === 1)
+    // db.getUsersByIds([userId])
+    // userJoined: result.rows
+    // socket.broadcast.emit("user joined", userJoined)
+
+    socket.on("disconnect", () => {
+        const userId = onlineUsers[socket.id];
+        delete onlineUsers[socket.id];
+
+        onlineUserCounters[userId] = onlineUserCounters[userId] - 1;
+        if (onlineUserCounters[userId] === 0) {
+            io.emit("user left", userId);
+        }
+    });
 
     socket.on("new chat message", (message) => {
         db.addChatMessage(userId, message)

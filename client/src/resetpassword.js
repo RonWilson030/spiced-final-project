@@ -80,47 +80,55 @@ export default class ResetPassword extends Component {
         console.log("state view", this.state.view);
         if (this.state.view === 1) {
             return (
-                <div>
-                    <h1>Reset Password</h1>
-                    <h2>Please enter your registered email:</h2>
-                    <input
-                        onChange={(e) => this.handleChange(e)}
-                        key="key_email"
-                        name="email"
-                        placeholder="email"
-                        type="text"
-                    ></input>
-                    <button onClick={() => this.handleResetClick()}>
-                        Submit
-                    </button>
+                <div id="reset">
+                    <div className="login-container">
+                        <h1>Reset Password</h1>
+                        <p>Please enter your email:</p>
+                        <input
+                            onChange={(e) => this.handleChange(e)}
+                            key="key_email"
+                            name="email"
+                            placeholder="email"
+                            type="text"
+                        ></input>
+                        <div>
+                            <button onClick={() => this.handleResetClick()}>
+                                Submit
+                            </button>
+                        </div>
+                    </div>
                 </div>
             );
         } else if (this.state.view === 2) {
             return (
-                <div>
-                    <h1>Reset Password</h1>
-                    <h2>Please enter your code and new password:</h2>
-                    <input
-                        onChange={(e) => this.handleChange(e)}
-                        key="key_code"
-                        name="code"
-                        placeholder="code"
-                        type="text"
-                    ></input>
-                    <input
-                        onChange={(e) => this.handleChange(e)}
-                        name="newpassword"
-                        placeholder="new password"
-                        type="password"
-                    ></input>
-                    <button onClick={() => this.handleSubmitCode()}>
-                        Submit
-                    </button>
+                <div id="reset">
+                    <div className="login-container">
+                        <h1>Reset Password</h1>
+                        <p>Please enter your code and new password:</p>
+                        <input
+                            onChange={(e) => this.handleChange(e)}
+                            key="key_code"
+                            name="code"
+                            placeholder="code"
+                            type="text"
+                        ></input>
+                        <input
+                            onChange={(e) => this.handleChange(e)}
+                            name="newpassword"
+                            placeholder="new password"
+                            type="password"
+                        ></input>
+                        <div>
+                            <button onClick={() => this.handleSubmitCode()}>
+                                Submit
+                            </button>
+                        </div>
+                    </div>
                 </div>
             );
         } else if (this.state.view === 3) {
             return (
-                <div>
+                <div id="reset">
                     <h1>Reset Password</h1>
                     <h2>Success!</h2>
                     <Link to="/login">Log in!</Link>

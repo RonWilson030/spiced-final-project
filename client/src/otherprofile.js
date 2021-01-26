@@ -47,6 +47,12 @@ export default class OtherProfile extends Component {
                     <div className="list-title">
                         {this.state.first} {this.state.last}
                     </div>
+                    <div className="friendship-button">
+                        <FriendshipButton
+                            userId={this.props.userId}
+                            otherUserId={this.props.match.params.id}
+                        />
+                    </div>
                     <div className="profile-container">
                         <img
                             className="profile-avatar"
@@ -56,12 +62,6 @@ export default class OtherProfile extends Component {
                         <div className="profile-content">
                             <p>About {this.state.first}:</p>
                             <div className="bio">{this.state.bio}</div>
-                        </div>
-                        <div id="make-friends-button">
-                            <FriendshipButton
-                                userId={this.props.userId}
-                                otherUserId={this.props.match.params.id}
-                            />
                         </div>
                     </div>
                     <div className="list-title">Favourite recipes:</div>

@@ -4,8 +4,15 @@ export async function getShoppingList() {
     const { data } = await axios.get("/get-shoppinglist");
     console.log("data get list action: ", data);
     return {
-        type: "GET_SHOPPINGLIST",
+        type: "SET_SHOPPINGLIST",
         shoppingList: data.shoppingList,
+    };
+}
+
+export async function addShoppingListItem(item) {
+    return {
+        type: "ADD_SHOPPINGLIST_ITEM",
+        item,
     };
 }
 
@@ -100,5 +107,32 @@ export async function getMessages(messages) {
     return {
         type: "LOAD_MESSAGES",
         messages: messages,
+    };
+}
+
+export async function onlineUsers(onlineUsers) {
+    // console.log("onlineUsers: ", onlineUsers);
+
+    return {
+        type: "ONLINE_USERS",
+        onlineUsers: onlineUsers,
+    };
+}
+
+export async function userJoined(userJoined) {
+    // console.log("getMessages: ", messages);
+
+    return {
+        type: "USER_JOINED",
+        userJoined: userJoined,
+    };
+}
+
+export async function userLeft(userLeft) {
+    // console.log("getMessages: ", messages);
+
+    return {
+        type: "USER_LEFT",
+        id: userLeft,
     };
 }

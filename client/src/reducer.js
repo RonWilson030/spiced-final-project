@@ -3,6 +3,7 @@ const INITIAL_STATE = {
     users: [],
     messages: [],
     shoppingList: [],
+    onlineUsers: [],
 };
 
 export default function (state = INITIAL_STATE, action) {
@@ -22,10 +23,17 @@ export default function (state = INITIAL_STATE, action) {
         };
     }
 
-    if (action.type == "GET_SHOPPINGLIST") {
+    if (action.type == "SET_SHOPPINGLIST") {
         state = {
             ...state,
             shoppingList: action.shoppingList,
+        };
+    }
+
+    if (action.type == "ADD_SHOPPINGLIST_ITEM") {
+        state = {
+            ...state,
+            shoppingList: [...state.shoppingList, action.item],
         };
     }
 
@@ -82,6 +90,29 @@ export default function (state = INITIAL_STATE, action) {
         state = {
             ...state,
             messages: action.messages,
+        };
+    }
+
+    if (action.type == "ONLINE_USERS") {
+        state = {
+            ...state,
+            onlineUsers: action.onlineUsers,
+        };
+    }
+
+    if (action.type == "USER_JOINED") {
+        state = {
+            ...state,
+            onlineUsers: [...state.onlineUsers, action.userJoined],
+        };
+    }
+
+    if (action.type == "USER_LEFT") {
+        state = {
+            ...state,
+            onlineUsers: state.onlineUsers.filter((user) => {
+                return user.id != action.id;
+            }),
         };
     }
 

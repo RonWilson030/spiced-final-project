@@ -46,28 +46,40 @@ export default class Uploader extends Component {
         // console.log("props in uploader: ", this.props);
         return (
             <div id="uploader">
-                <div id="uploader-container">
-                    <div>
-                        <img
-                            className="uploader-image"
-                            src={this.props.profilePic || "/default.png"}
-                        />
-                    </div>
-                    <div>
-                        <input
-                            onChange={(e) => this.handleFileChange(e)}
-                            name="image"
-                            type="file"
-                            accept="image/*"
-                        ></input>
-                    </div>
-                    <div>
-                        <button
-                            className="hand-cursor"
-                            onClick={() => this.handleUpload()}
+                <div className="uploader-container">
+                    <div className="uploader-content">
+                        <p
+                            className="uploader-close hand-cursor"
+                            onClick={() => this.props.toggleUploader()}
                         >
-                            Upload
-                        </button>
+                            x
+                        </p>
+
+                        <div>
+                            <h2>Change profilepicture?</h2>
+                        </div>
+                        <div>
+                            <img
+                                className="uploader-image"
+                                src={this.props.profilePic || "/default.png"}
+                            />
+                        </div>
+                        <div className="uploader-file">
+                            <input
+                                onChange={(e) => this.handleFileChange(e)}
+                                name="image"
+                                type="file"
+                                accept="image/*"
+                            ></input>
+                        </div>
+                        <div>
+                            <button
+                                className="hand-cursor"
+                                onClick={() => this.handleUpload()}
+                            >
+                                Upload
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

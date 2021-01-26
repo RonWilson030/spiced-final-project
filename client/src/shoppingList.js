@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "./axios";
-import { getShoppingList, deleteShoppingItem } from "./actions";
+import {
+    getShoppingList,
+    deleteShoppingItem,
+    addShoppingListItem,
+} from "./actions";
 import { useEffect } from "react";
 
 export default function ShoppingList() {
@@ -26,6 +30,7 @@ export default function ShoppingList() {
             });
             if (status === 200) {
                 console.log("shoppinglist data: ", data);
+                dispatch(addShoppingListItem(data));
                 setAddItem("");
             }
         })();

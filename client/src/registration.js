@@ -54,7 +54,7 @@ export default class Registration extends Component {
     render() {
         return (
             <div id="registration">
-                <h1>Registration</h1>
+                <p>Be part of our cooking community:</p>
                 <div className="registration-container">
                     {this.state.error && (
                         <p>Something went wrong! Please try again.</p>
@@ -88,11 +88,11 @@ export default class Registration extends Component {
                             Register
                         </button>
                     </div>
-                    <>
+                    <div>
                         <p>
                             Already a member? <Link to="/login">Log in!</Link>
                         </p>
-                    </>
+                    </div>
                 </div>
             </div>
         );

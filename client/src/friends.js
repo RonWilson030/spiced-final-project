@@ -28,9 +28,9 @@ export default function Friends() {
     }, []);
 
     return (
-        <div>
-            <div id="friends-container">
-                <div id="friends-content">
+        <div id="friends">
+            <div className="friends-container">
+                <div className="friends-content">
                     {friends.length > 0 ? (
                         <>
                             <h2>Friends:</h2>
@@ -70,7 +70,7 @@ export default function Friends() {
                         <p>You have no friends!</p>
                     )}
                 </div>
-                <div id="friends-content">
+                <div className="friends-content">
                     {wannabes.length > 0 ? (
                         <>
                             <h2>Requests:</h2>

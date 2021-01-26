@@ -134,11 +134,13 @@ export default function SearchRecipes() {
                     {recipes &&
                         recipes.map((item) => (
                             <div className="recipe-content" key={item.id}>
-                                <a href={item.url}>
+                                <a
+                                    href={item.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                >
                                     <img
                                         className="image hand-cursor"
-                                        target="_blank"
-                                        rel="noreferrer"
                                         src={item.imageUrl}
                                     ></img>
                                 </a>

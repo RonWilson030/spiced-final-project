@@ -8,6 +8,12 @@ export default function Chat() {
 
     const chatMessages = useSelector((state) => state && state.messages);
 
+    const onlineUsers = useSelector((state) => state && state.onlineUsers);
+
+    // console.log("online users chat: ", onlineUsers);
+
+    // console.log("omessages: ", chatMessages);
+
     const toDateString = (isoDate) => {
         const date = new Date(isoDate).toLocaleDateString("en-gb", {
             year: "numeric",
@@ -27,32 +33,45 @@ export default function Chat() {
 
     return (
         <div id="chat">
-            <div className="list-title">
+            <h3 className="list-title">
                 Talk food tips, favourite recipes or any advice for your next
                 dinner plans!
+            </h3>
+            <div className="online-users-container">
+                <p>Online:</p>
+                {onlineUsers.map((user) => (
+                    <div key={user.id}>
+                        <Link to={`/users/${user.id}`}>
+                            <img
+                                className="online-avatar"
+                                src={user.profile_pic || "/default.png"}
+                            ></img>
+                        </Link>
+                    </div>
+                ))}
             </div>
             <div className="chat-container">
                 <div>
                     {chatMessages &&
-                        chatMessages.map((user) => (
-                            <div key={user.id}>
+                        chatMessages.map((message) => (
+                            <div className="chat-wrapper" key={message.id}>
                                 <div className="chat-content">
-                                    <Link to={`/users/${user.id}`}>
+                                    <Link to={`/users/${message.user_id}`}>
                                         <img
                                             className="avatar"
                                             src={
-                                                user.profile_pic ||
+                                                message.profile_pic ||
                                                 "/default.png"
                                             }
                                         ></img>
                                     </Link>
                                     <div>
-                                        {user.first} posted on{" "}
-                                        {toDateString(user.timestamp)}
+                                        {message.first} {message.last} posted on{" "}
+                                        {toDateString(message.timestamp)}
                                         {":"}
                                         <div>
                                             {'"'}
-                                            {user.message}
+                                            {message.message}
                                             {'"'}
                                         </div>
                                     </div>

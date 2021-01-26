@@ -27,13 +27,13 @@ export default function FindPeople() {
     }, [query]);
 
     return (
-        <div>
-            <div id="finder-container">
-                <div id="finder-content">
+        <div id="find-people">
+            <div className="finder-container">
+                <div className="finder-content">
                     <h2>Find someone:</h2>
                     <input
                         onChange={(e) => setQuery(e.target.value)}
-                        placeholder="search friend..."
+                        placeholder="search people..."
                     />
                     <div>
                         {users &&
@@ -47,7 +47,7 @@ export default function FindPeople() {
                                                 "/default.png"
                                             }
                                         ></img>
-                                        <div id="name-style">
+                                        <div className="name-style">
                                             {user.first} {user.last}
                                         </div>
                                     </div>
