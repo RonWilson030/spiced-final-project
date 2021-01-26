@@ -3,16 +3,15 @@ import { HashRouter, Route } from "react-router-dom";
 import Registration from "./registration";
 import Login from "./login";
 import ResetPassword from "./resetpassword";
-// import Profile from "./profile";
 
 export default function Welcome() {
     return (
         <div id="welcome">
-            <h1>SO CHILL, NOT WORK!</h1>
+            <h1>APPETITE!</h1>
             <img
                 id="welcome-logo"
                 src="http://spontaneoussmiley.com/wp-content/uploads/2011/01/Iconic-Yellow-Smiley.png"
-                alt="socialnetwork logo"
+                alt="appetite logo"
             />
             <HashRouter>
                 <div>

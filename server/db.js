@@ -1,7 +1,7 @@
 const spicedPg = require("spiced-pg");
 const db = spicedPg(
     process.env.DATABASE_URL ||
-        "postgres:postgres:password@localhost:5432/socialnetwork"
+        "postgres:postgres:password@localhost:5432/spicedfinalproject"
 );
 
 module.exports.registerUser = (first, last, email, password) => {
@@ -88,10 +88,6 @@ module.exports.updateBio = (userId, bio) => {
     );
 };
 
-module.exports.getLastUsers = () => {
-    return db.query("SELECT * FROM users ORDER BY id DESC LIMIT 3");
-};
-
 module.exports.getFriendshipStatus = ({ userId, otherUserId }) => {
     return db.query(
         `SELECT *
@@ -142,6 +138,109 @@ module.exports.getFriends = (userId) => {
         [userId]
     );
 };
+// check getFriends!! users.first?
+
+module.exports.addFavourites = (title, imageUrl, url, favouriteId) => {
+    return db.query(
+        `
+    INSERT INTO favourites (title, imageUrl, url, favouriteId)
+    VALUES ($1, $2, $3, $4) RETURNING *`,
+        [title, imageUrl, url, favouriteId]
+    );
+};
+
+module.exports.getUserFavouriteRecipes = (userId) => {
+    return db.query(
+        `SELECT recipes.*
+        FROM recipes
+        JOIN favourites
+        ON recipes.id = favourites.recipe_id
+        WHERE favourites.user_id = $1`,
+        [userId]
+    );
+};
+
+module.exports.getFavouriteRecipeUrl = (userId, recipeId) => {
+    return db.query(
+        `SELECT recipes.*
+        FROM recipes
+        JOIN favourites
+        ON recipes.remote_id = $2
+        WHERE favourites.user_id = $1`,
+        [userId, recipeId]
+    );
+};
+
+module.exports.addRecipe = (title, imageUrl, url, remoteId) => {
+    return db.query(
+        `INSERT INTO recipes (title, imageurl, url, remote_id)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *`,
+        [title, imageUrl, url, remoteId]
+    );
+};
+
+module.exports.getRecipeByRemoteId = (userId, recipeId) => {
+    return db.query(
+        `SELECT 
+        recipes.*,
+        COALESCE((SELECT favourites.id FROM favourites WHERE user_id = $1 AND recipes.id = favourites.recipe_id), NULL) favourite_id
+        FROM recipes
+        WHERE recipes.remote_id = $2`,
+        [userId, recipeId]
+    );
+};
+
+module.exports.addFavourite = (userId, recipeId) => {
+    return db.query(
+        `INSERT INTO favourites (user_id, recipe_id)
+        VALUES ($1, $2)
+        RETURNING id`,
+        [userId, recipeId]
+    );
+};
+
+module.exports.deleteFavourite = (userId, recipeId) => {
+    return db.query(
+        `DELETE FROM favourites
+        WHERE user_id = $1 AND recipe_id = $2`,
+        [userId, recipeId]
+    );
+};
+
+// module.exports.getFavourites = (userId) => {
+//     return db.query(
+//         `SELECT *
+//         FROM favourites
+//         WHERE user_id = $1`,
+//         [userId]
+//     );
+// };
+
+module.exports.addListItem = (userId, item) => {
+    return db.query(
+        `INSERT INTO shopping_list (user_id, item)
+        VALUES ($1, $2)
+        RETURNING *`,
+        [userId, item]
+    );
+};
+
+module.exports.getShoppingList = (userId) => {
+    return db.query(
+        `SELECT * FROM shopping_list
+        WHERE user_id = $1`,
+        [userId]
+    );
+};
+
+module.exports.deleteListItem = (userId, itemId) => {
+    return db.query(
+        `DELETE FROM shopping_list
+        WHERE user_id = $1 AND shopping_list.id = $2`,
+        [userId, itemId]
+    );
+};
 
 module.exports.addChatMessage = (userId, message) => {
     return db.query(
@@ -152,7 +251,7 @@ module.exports.addChatMessage = (userId, message) => {
     );
 };
 
-module.exports.getTenMostRecentMessages = () => {
+module.exports.getMessages = () => {
     return db.query(
         `SELECT
             chat_messages.id,
@@ -164,7 +263,6 @@ module.exports.getTenMostRecentMessages = () => {
             users.profile_pic
         FROM chat_messages
         JOIN users
-        ON chat_messages.user_id = users.id
-        LIMIT 10`
+        ON chat_messages.user_id = users.id`
     );
 };

@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getFriends, acceptRequest, unfriend } from "./actions";
+import { getFriends, acceptRequest, disconnect } from "./actions";
+import FindPeople from "./findPeople";
 
 export default function Friends() {
     const dispatch = useDispatch();
@@ -32,7 +33,7 @@ export default function Friends() {
                 <div id="friends-content">
                     {friends.length > 0 ? (
                         <>
-                            <h1>Friends:</h1>
+                            <h2>Friends:</h2>
                             <div className="friends-wrapper">
                                 {friends &&
                                     friends.map((user) => (
@@ -46,31 +47,33 @@ export default function Friends() {
                                                             "/default.png"
                                                         }
                                                     ></img>
-                                                    <div>
+                                                    <p>
                                                         {user.first} {user.last}
-                                                    </div>
+                                                    </p>
                                                 </div>
                                             </Link>
                                             <button
                                                 className="button"
                                                 onClick={() =>
-                                                    dispatch(unfriend(user.id))
+                                                    dispatch(
+                                                        disconnect(user.id)
+                                                    )
                                                 }
                                             >
-                                                Unfriend
+                                                Disconnect
                                             </button>
                                         </div>
                                     ))}
                             </div>
                         </>
                     ) : (
-                        <h1>You have no friends!</h1>
+                        <p>You have no friends!</p>
                     )}
                 </div>
                 <div id="friends-content">
                     {wannabes.length > 0 ? (
                         <>
-                            <h1>Requests:</h1>
+                            <h2>Requests:</h2>
                             <div className="friends-wrapper">
                                 {wannabes &&
                                     wannabes.map((user) => (
@@ -84,9 +87,9 @@ export default function Friends() {
                                                             "/default.png"
                                                         }
                                                     ></img>
-                                                    <div>
+                                                    <p>
                                                         {user.first} {user.last}
-                                                    </div>
+                                                    </p>
                                                 </div>
                                             </Link>
                                             <button
@@ -103,9 +106,12 @@ export default function Friends() {
                             </div>
                         </>
                     ) : (
-                        <h1>You have no requests!</h1>
+                        <p>You have no requests!</p>
                     )}
                 </div>
+            </div>
+            <div>
+                <FindPeople />
             </div>
         </div>
     );

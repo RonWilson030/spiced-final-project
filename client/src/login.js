@@ -27,9 +27,9 @@ export default class Login extends Component {
         axios
             .post("/login", this.state)
             .then((response) => {
-                console.log("response data: ", response.data);
+                // console.log("response data: ", response.data);
                 if (response.data.success) {
-                    location.replace("/");
+                    location.replace("/profile");
                 } else {
                     this.setState((state) => ({
                         ...state,
@@ -48,28 +48,32 @@ export default class Login extends Component {
 
     render() {
         return (
-            <div>
-                <h1>Login</h1>
-                {this.state.error && (
-                    <p>Something went wrong! Please try again.</p>
-                )}
-                <input
-                    onChange={(e) => this.handleChange(e)}
-                    name="email"
-                    placeholder="email"
-                    type="email"
-                ></input>
-                <input
-                    onChange={(e) => this.handleChange(e)}
-                    name="password"
-                    placeholder="password"
-                    type="password"
-                ></input>
-                <div>
-                    <button onClick={() => this.handleClick()}>Login</button>
-                </div>
-                <div>
-                    <Link to="/password/reset">Forgot password?</Link>
+            <div id="login">
+                <div className="login-container">
+                    <h1>Login</h1>
+                    {this.state.error && (
+                        <p>Something went wrong! Please try again.</p>
+                    )}
+                    <input
+                        onChange={(e) => this.handleChange(e)}
+                        name="email"
+                        placeholder="email"
+                        type="email"
+                    ></input>
+                    <input
+                        onChange={(e) => this.handleChange(e)}
+                        name="password"
+                        placeholder="password"
+                        type="password"
+                    ></input>
+                    <div>
+                        <button onClick={() => this.handleClick()}>
+                            Login
+                        </button>
+                    </div>
+                    <div>
+                        <Link to="/password/reset">Forgot password?</Link>
+                    </div>
                 </div>
             </div>
         );

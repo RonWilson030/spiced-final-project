@@ -1,7 +1,11 @@
 import { useSelector } from "react-redux";
 import { socket } from "./socket";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export default function Chat() {
+    const [message, setMessage] = useState("");
+
     const chatMessages = useSelector((state) => state && state.messages);
 
     const toDateString = (isoDate) => {
@@ -16,39 +20,39 @@ export default function Chat() {
         return `${date}, ${time}`;
     };
 
-    const handleKeyDown = (e) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            socket.emit("new chat message", e.target.value);
-            e.target.value = "";
-        }
+    const handleClick = () => {
+        socket.emit("new chat message", message);
+        setMessage("");
     };
-
-    // console.log("chat messages: ", chatMessages);
 
     return (
         <div id="chat">
-            <h1>Welcome to the chatroom!</h1>
+            <div className="list-title">
+                Talk food tips, favourite recipes or any advice for your next
+                dinner plans!
+            </div>
             <div className="chat-container">
                 <div>
                     {chatMessages &&
-                        chatMessages.map((messenger) => (
-                            <div key={messenger.id}>
+                        chatMessages.map((user) => (
+                            <div key={user.id}>
                                 <div className="chat-content">
-                                    <img
-                                        className="avatar"
-                                        src={
-                                            messenger.profile_pic ||
-                                            "/default.png"
-                                        }
-                                    ></img>
+                                    <Link to={`/users/${user.id}`}>
+                                        <img
+                                            className="avatar"
+                                            src={
+                                                user.profile_pic ||
+                                                "/default.png"
+                                            }
+                                        ></img>
+                                    </Link>
                                     <div>
-                                        {messenger.first} {messenger.last}{" "}
-                                        posted on{" "}
-                                        {toDateString(messenger.timestamp)}{" "}
+                                        {user.first} posted on{" "}
+                                        {toDateString(user.timestamp)}
+                                        {":"}
                                         <div>
                                             {'"'}
-                                            {messenger.message}
+                                            {user.message}
                                             {'"'}
                                         </div>
                                     </div>
@@ -57,9 +61,17 @@ export default function Chat() {
                         ))}
                 </div>
             </div>
-            <div>
+            <div className="chat-messenger">
                 <p>Enter your message here:</p>
-                <textarea onKeyDown={handleKeyDown} />
+                <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                />
+                <div>
+                    <button className="hand-cursor" onClick={handleClick}>
+                        Send Message
+                    </button>
+                </div>
             </div>
         </div>
     );

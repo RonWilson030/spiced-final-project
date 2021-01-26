@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import { postNewMessage, addMostRecentMessages } from "./actions";
+import { postNewMessage, getMessages } from "./actions";
 
 export let socket;
 
@@ -12,7 +12,7 @@ export const init = (store) => {
         store.dispatch(postNewMessage(userAndMessage));
     });
 
-    socket.on("10 most recent messages", (recentMessages) => {
-        store.dispatch(addMostRecentMessages(recentMessages));
+    socket.on("get messages", (messages) => {
+        store.dispatch(getMessages(messages));
     });
 };

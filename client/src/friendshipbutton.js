@@ -12,7 +12,7 @@ export default function FriendshipButton({ userId, otherUserId }) {
             axios
                 .get(`/friendship/status/${otherUserId}`)
                 .then((response) => {
-                    console.log("friendship status data: ", response);
+                    // console.log("friendship status data: ", response);
                     const result = response.data.rows;
                     const text = friendsStatusButtonText(
                         result,
@@ -34,7 +34,7 @@ export default function FriendshipButton({ userId, otherUserId }) {
                 otherUserId,
             })
             .then((result) => {
-                console.log("post result: ", result);
+                // console.log("post result: ", result);
                 const response = result.data.rows;
                 const text = friendsStatusButtonText(
                     response,

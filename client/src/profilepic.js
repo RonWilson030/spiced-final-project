@@ -1,26 +1,18 @@
-export default function ProfilePic({ toggleMenu, profilePic, first, last }) {
+import { Link } from "react-router-dom";
+
+export default function ProfilePic({ profilePic, first, last }) {
     // console.log("props in profilepic: ", first, last, url);
 
     return (
         <>
-            <img
-                id="avatar"
-                className="hand-cursor"
-                onClick={toggleMenu}
-                src={profilePic}
-                alt={`${first} ${last}`}
-            />
+            <Link to={`/profile`}>
+                <img
+                    id="avatar"
+                    className="hand-cursor"
+                    src={profilePic}
+                    alt={`${first} ${last}`}
+                />
+            </Link>
         </>
     );
 }
-
-// export default function ProfilePic(props) {
-//     console.log("props in profilepic: ", props);
-//     return (
-//         <div>
-//             <h1>
-//                 ProfilePic: {props.first} {props.last}
-//             </h1>
-//         </div>
-//     );
-// }

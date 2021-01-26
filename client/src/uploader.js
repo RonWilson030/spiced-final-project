@@ -10,7 +10,7 @@ export default class Uploader extends Component {
     }
 
     componentDidMount() {
-        console.log("uploader component mounted!");
+        // console.log("uploader component mounted!");
     }
 
     handleFileChange(e) {

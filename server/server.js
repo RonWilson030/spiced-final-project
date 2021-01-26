@@ -1,4 +1,5 @@
 const express = require("express");
+const axios = require("axios");
 const app = express();
 const compression = require("compression");
 const path = require("path");
@@ -13,6 +14,7 @@ const { s3Url } = require("./config");
 const multer = require("multer");
 const uidSafe = require("uid-safe");
 const server = require("http").Server(app);
+const { API_KEY } = require("./secrets.json");
 const io = require("socket.io")(server, {
     allowRequest: (req, callback) =>
         callback(null, req.headers.referer.startsWith("http://localhost:3000")),
@@ -85,6 +87,98 @@ app.get("/welcome", (req, res) => {
     }
 });
 
+app.get("/api/recipes/search", async (req, res) => {
+    const { q, category, offset } = req.query;
+    const userId = req.session.userId;
+    const params = {
+        number: 12,
+        apiKey: API_KEY,
+        offset,
+    };
+    let url;
+    if (category === "ingredients") {
+        url = "https://api.spoonacular.com/recipes/findByIngredients";
+        params.ingredients = q;
+    } else {
+        url = "https://api.spoonacular.com/recipes/complexSearch";
+        params.query = q;
+    }
+    const response = await axios.get(url, { params });
+    const results =
+        category === "ingredients" ? response.data : response.data.results;
+
+    try {
+        const recipes = await Promise.all(
+            results.map(async (item) => {
+                let recipeResult = await db.getRecipeByRemoteId(
+                    userId,
+                    item.id
+                );
+                if (recipeResult.rows.length === 1) {
+                    return recipeResult.rows[0];
+                } else {
+                    const url = `https://api.spoonacular.com/recipes/${item.id}/information?apiKey=${API_KEY}`;
+                    const infoResponse = await axios.get(url);
+                    const { sourceUrl } = infoResponse.data;
+                    const { id, title, image } = item;
+                    recipeResult = await db.addRecipe(
+                        title,
+                        image,
+                        sourceUrl,
+                        id
+                    );
+                    return {
+                        ...recipeResult.rows[0],
+                        favourite_id: null,
+                    };
+                }
+            })
+        );
+        res.json({
+            recipes: recipes.map(
+                ({ id, imageurl, title, url, favourite_id }) => ({
+                    id,
+                    title,
+                    imageUrl: imageurl,
+                    url,
+                    favouriteId: favourite_id,
+                })
+            ),
+        });
+    } catch (error) {
+        console.log("Search Error!", error);
+        res.statusCode = 500;
+        res.json({ error: "Unexpected error!" });
+    }
+});
+
+app.post("/api/recipes/favourite", async (req, res) => {
+    const { recipeId } = req.body;
+    const userId = req.session.userId;
+    try {
+        const result = await db.addFavourite(userId, recipeId);
+        // console.log("add fave result: ", result);
+        res.json({ favouriteId: result.rows[0].id });
+    } catch (error) {
+        console.log("add favourite error", error);
+    }
+});
+
+app.delete("/api/recipes/favourite/:id", async (req, res) => {
+    // console.log("query req params : ", req.params);
+    // console.log("req body: ", req.body);
+    const { id } = req.params;
+    const userId = req.session.userId;
+    try {
+        const deleteResult = await db.deleteFavourite(userId, id);
+        console.log("delete fave result: ", deleteResult);
+        res.statusCode = 204;
+        res.send();
+    } catch (error) {
+        console.log("delete favourite error", error);
+    }
+});
+
 app.get("/api/users", (req, res) => {
     const userId = req.session.userId;
     db.getUserById(userId)
@@ -102,17 +196,6 @@ app.get("/api/users", (req, res) => {
         })
         .catch((error) => {
             console.log("users error", error);
-        });
-});
-
-app.get("/api/users/last", (req, res) => {
-    db.getLastUsers()
-        .then((response) => {
-            // console.log("get users response: ", response);
-            res.json(response.rows);
-        })
-        .catch((error) => {
-            console.log("last users error", error);
         });
 });
 
@@ -158,7 +241,23 @@ app.get("/api/users/:id", (req, res) => {
                         profile_pic: profilePic,
                         bio,
                     } = response.rows[0];
-                    res.json({ id, first, last, email, profilePic, bio });
+                    db.getUserFavouriteRecipes(id)
+                        .then((result) => {
+                            // console.log("get other user faves: ", result);
+                            res.json({
+                                id,
+                                first,
+                                last,
+                                email,
+                                profilePic,
+                                bio,
+                                favourites: result.rows,
+                            });
+                        })
+                        .catch((error) => {
+                            console.log("users error", error);
+                        });
+                    // res.json({ id, first, last, email, profilePic, bio });
                 }
             })
             .catch((error) => {
@@ -220,8 +319,8 @@ app.post("/password/reset", (req, res) => {
                 length: 6,
             });
             db.addCode(email, secretCode)
-                .then((addCodeResult) => {
-                    console.log("add code result:", addCodeResult);
+                .then(() => {
+                    // console.log("add code result:", addCodeResult);
                     sendEmail(
                         email,
                         secretCode,
@@ -299,7 +398,7 @@ app.get("/friendship/status/:otherUserId", (req, res) => {
     const userId = req.session.userId;
     db.getFriendshipStatus({ userId, otherUserId })
         .then((response) => {
-            console.log("friendship status response: ", response);
+            // console.log("friendship status response: ", response);
             res.json({ rows: response.rows });
         })
         .catch((error) => {
@@ -319,15 +418,15 @@ app.post("/friendship/action", (req, res) => {
             .catch((error) => {
                 console.log("make request error", error);
             });
-    } else if (action === "Cancel Request" || action === "Unfriend") {
+    } else if (action === "Cancel Request" || action === "Disconnect") {
         // console.log("user id & otheruserId:", userId, otherUserId);
         db.cancelRequest({ userId, otherUserId })
             .then((response) => {
-                // console.log("cancel/unfriend request response: ", response);
+                // console.log("cancel/disconnect request response: ", response);
                 res.json({ success: true, rows: response.rows });
             })
             .catch((error) => {
-                console.log("cancel/unfriend request error", error);
+                console.log("cancel/disconnect request error", error);
             });
     } else if (action === "Accept Request") {
         db.acceptRequest({ userId, otherUserId })
@@ -353,8 +452,107 @@ app.get("/get-friends", (req, res) => {
         });
 });
 
+app.get("/get-favourites", (req, res) => {
+    const userId = req.session.userId;
+    db.getUserFavouriteRecipes(userId)
+        .then((result) => {
+            // console.log("get fave action result", result);
+            res.json({ success: true, favourites: result.rows });
+        })
+        .catch((error) => {
+            console.log("get faves error", error);
+        });
+});
+
+app.post("/favourites/delete", (req, res) => {
+    const userId = req.session.userId;
+    const { action, favouriteId } = req.body;
+    if (action === "deleteFavourite") {
+        // console.log("user id & otheruserId:", userId, otherUserId);
+        db.deleteFavourite(userId, favouriteId)
+            .then((response) => {
+                // console.log("delete fave request response: ", response);
+                res.json({ success: true, rows: response.rows });
+            })
+            .catch((error) => {
+                console.log("delete favourites error", error);
+            });
+    }
+});
+
+app.get("/api/shoppinglist/add", async (req, res) => {
+    // console.log("item req params : ", req.params);
+    // console.log("item req query : ", req.query);
+    // console.log("req body: ", req.body);
+    const { item } = req.query;
+    const userId = req.session.userId;
+    try {
+        const addItemResult = await db.addListItem(userId, item);
+        console.log("add listitem result: ", addItemResult);
+        res.send();
+    } catch (error) {
+        console.log("get listitem error", error);
+    }
+});
+
+app.get("/get-shoppinglist", async (req, res) => {
+    const userId = req.session.userId;
+    try {
+        const getListResult = await db.getShoppingList(userId);
+        // console.log("get shopping list result: ", getListResult);
+        res.json({ shoppingList: getListResult.rows });
+    } catch (error) {
+        console.log("get listitem error", error);
+    }
+});
+
+app.post("/shoppinglist/delete", (req, res) => {
+    const userId = req.session.userId;
+    const { action, itemId } = req.body;
+    if (action === "deleteShoppingItem") {
+        // console.log("user id & otheruserId:", userId, otherUserId);
+        db.deleteListItem(userId, itemId)
+            .then((response) => {
+                // console.log("delete fave request response: ", response);
+                res.json({ success: true, rows: response.rows });
+            })
+            .catch((error) => {
+                console.log("delete favourites error", error);
+            });
+    }
+});
+
+app.get("/api/search/trivia", async (req, res) => {
+    const url = `https://api.spoonacular.com/food/trivia/random?apiKey=${API_KEY}`;
+
+    try {
+        const response = await axios.get(url);
+        console.log("trivia response: ", response);
+        res.json({ result: response.data });
+    } catch (error) {
+        console.log("Search Error!", error);
+        res.statusCode = 500;
+        res.json({ error: "Unexpected error!" });
+    }
+});
+
+app.get("/api/search/joke", async (req, res) => {
+    const url = `https://api.spoonacular.com/food/jokes/random?apiKey=${API_KEY}`;
+
+    try {
+        const response = await axios.get(url);
+        console.log("joke response: ", response);
+        res.json({ result: response.data });
+    } catch (error) {
+        console.log("Search Error!", error);
+        res.statusCode = 500;
+        res.json({ error: "Unexpected error!" });
+    }
+});
+
 app.get("/logout", (req, res) => {
     req.session = null;
+    res.send();
 });
 
 app.get("*", function (req, res) {
@@ -382,11 +580,11 @@ io.on("connection", (socket) => {
     socket.on("new chat message", (message) => {
         db.addChatMessage(userId, message)
             .then((result) => {
-                console.log("get add message result", result);
+                // console.log("get add message result", result);
                 const { id, timestamp } = result.rows[0];
                 db.getUserById(userId)
                     .then((result) => {
-                        console.log("get userId result", result);
+                        // console.log("get userId result", result);
                         const { first, last, profile_pic } = result.rows[0];
                         io.sockets.emit("new message and user", {
                             id,
@@ -406,10 +604,10 @@ io.on("connection", (socket) => {
             });
     });
 
-    db.getTenMostRecentMessages()
+    db.getMessages()
         .then(({ rows: messages }) => {
-            console.log("recent messages result: ", messages);
-            socket.emit("10 most recent messages", messages);
+            // console.log("get messages result: ", messages);
+            socket.emit("get messages", messages);
         })
         .catch((error) => {
             console.log("get chat error", error);

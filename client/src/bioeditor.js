@@ -54,18 +54,18 @@ export default class BioEditor extends Component {
                 <div>
                     {this.state.editMode ? (
                         <div>
-                            <button
-                                className="hand-cursor"
-                                onClick={() => this.saveBio()}
-                            >
-                                save bio
-                            </button>
                             <div>
                                 <textarea
                                     value={this.state.draftBio}
                                     onChange={(e) => this.handleTextChange(e)}
                                 />
                             </div>
+                            <button
+                                className="hand-cursor"
+                                onClick={() => this.saveBio()}
+                            >
+                                save bio
+                            </button>
                         </div>
                     ) : !this.props.currentBio ? (
                         <button

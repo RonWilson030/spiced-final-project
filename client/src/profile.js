@@ -1,19 +1,46 @@
-export default function Profile({ profilePic, first, last, bio, toggleMenu }) {
-    // console.log("profile props: ", props);
+import Uploader from "./uploader";
+import BioEditor from "./bioeditor";
+import Favourites from "./favouriteRecipes";
+import { useState } from "react";
+
+export default function Profile({
+    first,
+    last,
+    bio,
+    profilePic,
+    setBio,
+    setImage,
+}) {
+    const [uploaderIsVisible, setUploaderIsVisible] = useState(false);
+
+    const toggleUploader = () => {
+        // console.log("toggle uploader running!");
+        setUploaderIsVisible(!uploaderIsVisible);
+    };
+
     return (
         <div id="profile">
-            <img
-                id="profile-avatar"
-                onClick={toggleMenu}
-                src={profilePic}
-                alt={`${first} ${last}`}
-            />
-            <div id="profile-info">
-                <>
-                    {first} {last}
-                </>
-                <div id="bio-text">{bio}</div>
+            <div className="list-title">My profile</div>
+            <div className="profile-container">
+                <img
+                    className="profile-avatar hand-cursor"
+                    src={profilePic || "/default.png"}
+                    alt={`${first} ${last}`}
+                    onClick={() => toggleUploader()}
+                />
+                {uploaderIsVisible && (
+                    <Uploader
+                        profilePic={profilePic || "default.png"}
+                        setImage={setImage}
+                    />
+                )}
+                <div className="profile-content">
+                    <p>About me:</p>
+                    <div className="bio">{bio}</div>
+                    <BioEditor currentBio={bio} setBio={setBio} />
+                </div>
             </div>
+            <Favourites />
         </div>
     );
 }

@@ -2,16 +2,14 @@ import { Component } from "react";
 import axios from "./axios";
 import Profile from "./profile";
 import ProfilePic from "./profilepic";
-import FindPeople from "./findpeople";
 import Friends from "./friends";
-import Menu from "./menu";
-import Uploader from "./uploader";
+// import Uploader from "./uploader";
 import OtherProfile from "./otherprofile";
 import Chat from "./chat";
+import ShoppingList from "./shoppingList";
+import SearchRecipes from "./searchRecipes";
 import { BrowserRouter, Route, Link } from "react-router-dom";
-import Bio from "./bio";
-// import BioEditor from "./bioeditor";
-
+import Extras from "./extras";
 export default class App extends Component {
     constructor() {
         super();
@@ -21,12 +19,11 @@ export default class App extends Component {
             last: "",
             profilePic: "" || "/default.png",
             bio: "",
+            favourites: "",
             // uploaderIsVisible: false,
-            menuIsVisible: false,
         };
         this.setImage = this.setImage.bind(this);
         // this.toggleUploader = this.toggleUploader.bind(this);
-        this.toggleMenu = this.toggleMenu.bind(this);
         this.setBio = this.setBio.bind(this);
     }
 
@@ -42,27 +39,11 @@ export default class App extends Component {
             .catch((err) => console.log("error receiving data", err));
     }
 
-    toggleMenu() {
-        this.setState({
-            menuIsVisible: !this.state.menuIsVisible,
-        });
-    }
-
     // toggleUploader() {
     //     // console.log("toggle uploader running!");
     //     this.setState({
     //         uploaderIsVisible: !this.state.uploaderIsVisible,
     //     });
-    //     // ALTERNATIVE WAY:
-    //     // if (!this.state.uploaderIsVisible) {
-    //     //     this.setState({
-    //     //         uploaderIsVisible: true,
-    //     //     });
-    //     // } else {
-    //     //     this.setState({
-    //     //         uploaderIsVisible: false,
-    //     //     });
-    //     // }
     // }
 
     setImage(profilePic) {
@@ -79,52 +60,80 @@ export default class App extends Component {
         });
     }
 
-    render() {
-        // console.log("this.state.first: ", this.state.first);
-        // console.log("this.state.last: ", this.state.last);
+    handleLogout() {
+        axios
+            .get("/logout/")
+            .then((response) => {
+                console.log("logout response: ", response);
+                window.location.href = "/";
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
 
+    render() {
         // if (!id) {return null;}
         return (
             <BrowserRouter>
-                <div id="container">
+                <div className="main-container">
                     <header className="header-section">
                         <div>
-                            <Link to="/">
-                                <img
-                                    id="avatar"
-                                    src="http://spontaneoussmiley.com/wp-content/uploads/2011/01/Iconic-Yellow-Smiley.png"
-                                    alt="socialnetwork logo"
-                                />
+                            <ProfilePic
+                                first={this.state.first}
+                                last={this.state.last}
+                                profilePic={
+                                    this.state.profilePic || "/default.png"
+                                }
+                            />
+                        </div>
+
+                        <div className="hand-cursor">
+                            <Link to="/searchrecipes/">
+                                <i className="fas fa-utensils"></i>
+                                &nbsp;Recipes
                             </Link>
                         </div>
-                        <div id="friends" className="hand-cursor">
-                            <Link to="/friends/">Friends</Link>
-                        </div>
-                        <div id="chat" className="hand-cursor">
-                            <Link to="/chat/">Chat</Link>
-                        </div>
-                        <div id="find-friends" className="hand-cursor">
-                            <Link to="/users/">Find friends</Link>
-                        </div>
-                        <ProfilePic
-                            first={this.state.first}
-                            last={this.state.last}
-                            profilePic={this.state.profilePic || "/default.png"}
-                            toggleMenu={this.toggleMenu}
-                        />
-                    </header>
 
-                    <div id="menu">
-                        {this.state.menuIsVisible && (
-                            <div>
-                                <Menu toggleMenu={this.toggleMenu} />
-                            </div>
-                        )}
-                    </div>
+                        <div className="hand-cursor">
+                            <Link to="/shoppinglist/">
+                                <i className="fas fa-shopping-cart"></i>
+                                &nbsp;List
+                            </Link>
+                        </div>
+
+                        <div className="hand-cursor">
+                            <Link to="/friends/">
+                                <i className="fas fa-user-friends"></i>
+                                &nbsp;Friends
+                            </Link>
+                        </div>
+
+                        <div className="hand-cursor">
+                            <Link to="/chat/">
+                                <i className="fas fa-comments"></i>
+                                &nbsp;Chat
+                            </Link>
+                        </div>
+
+                        <div className="hand-cursor">
+                            <Link to="/extras/">
+                                <i className="fas fa-plus-square"></i>
+                                &nbsp;Extras
+                            </Link>
+                        </div>
+
+                        <div className="hand-cursor">
+                            <button onClick={() => this.handleLogout()}>
+                                <i className="fas fa-sign-out-alt"></i>
+                                &nbsp;Logout
+                            </button>
+                        </div>
+                    </header>
 
                     <Route
                         exact
-                        path="/"
+                        path="/profile"
                         render={() => (
                             <Profile
                                 first={this.state.first}
@@ -133,6 +142,9 @@ export default class App extends Component {
                                     this.state.profilePic || "/default.png"
                                 }
                                 bio={this.state.bio}
+                                favourites={this.state.favourites}
+                                setBio={this.setBio}
+                                setImage={this.setImage}
                             />
                         )}
                     />
@@ -149,29 +161,25 @@ export default class App extends Component {
                         )}
                     />
 
-                    <Route exact path="/users" render={() => <FindPeople />} />
+                    <Route
+                        exact
+                        path="/searchrecipes"
+                        render={() => <SearchRecipes />}
+                    />
+
+                    <Route
+                        exact
+                        path="/shoppinglist"
+                        render={() => <ShoppingList />}
+                    />
 
                     <Route exact path="/friends" render={() => <Friends />} />
 
                     <Route exact path="/chat" render={() => <Chat />} />
 
-                    <Route
-                        exact
-                        path="/bio"
-                        render={() => (
-                            <Bio
-                                first={this.state.first}
-                                last={this.state.last}
-                                profilePic={
-                                    this.state.profilePic || "/default.png"
-                                }
-                                bio={this.state.bio}
-                                setBio={this.setBio}
-                            />
-                        )}
-                    />
+                    <Route exact path="/extras" render={() => <Extras />} />
 
-                    <Route
+                    {/* <Route
                         exact
                         path="/uploader"
                         render={() => (
@@ -182,10 +190,10 @@ export default class App extends Component {
                                 setImage={this.setImage}
                             />
                         )}
-                    />
+                    /> */}
                 </div>
                 <div>
-                    <footer>So Chill, Not Work (c) | 2020</footer>
+                    <footer>APPetite (c) | 2021</footer>
                 </div>
             </BrowserRouter>
         );

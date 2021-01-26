@@ -1,29 +1,43 @@
 const INITIAL_STATE = {
+    favourites: [],
     users: [],
     messages: [],
+    shoppingList: [],
 };
 
-// const users = (state = [], action) => {
-//     const { type } = action;
-
-//     switch (type) {
-//         case "ACCEPT_REQUEST": {
-//             return state.users.map((user) => {
-//                 if (user.id == action.acceptUser) {
-//                     return { ...user, accepted: true };
-//                 } else {
-//                     return user;
-//                 }
-//             });
-//         }
-//         default:
-//             return state;
-//     }
-// };
-
-// export default combinedReducers({ users })
-
 export default function (state = INITIAL_STATE, action) {
+    if (action.type == "GET_FAVOURITES") {
+        state = {
+            ...state,
+            favourites: action.favourites,
+        };
+    }
+
+    if (action.type == "DELETE_FAVOURITE") {
+        state = {
+            ...state,
+            favourites: state.favourites.filter((item) => {
+                return item.id != action.deleteFavourite;
+            }),
+        };
+    }
+
+    if (action.type == "GET_SHOPPINGLIST") {
+        state = {
+            ...state,
+            shoppingList: action.shoppingList,
+        };
+    }
+
+    if (action.type == "DELETE_SHOPPINGLISTITEM") {
+        state = {
+            ...state,
+            shoppingList: state.shoppingList.filter((item) => {
+                return item.id != action.deleteShoppingList;
+            }),
+        };
+    }
+
     if (action.type == "GET_FRIENDS") {
         state = {
             ...state,
@@ -45,29 +59,29 @@ export default function (state = INITIAL_STATE, action) {
         };
     }
 
-    if (action.type == "UNFRIEND") {
-        // console.log("reducer action unfriend log");
+    if (action.type == "DISCONNECT") {
+        // console.log("reducer action diconnect log");
         state = {
             ...state,
             users: state.users.filter((user) => {
-                return user.id != action.unfriendUser;
+                return user.id != action.disconnectUser;
             }),
         };
     }
 
     if (action.type == "POST_NEW_MESSAGE") {
-        console.log("chat messages");
+        // console.log("chat messages");
         state = {
             ...state,
             messages: [...state.messages, action.userAndMessage],
         };
     }
 
-    if (action.type == "RECENT_MESSAGES") {
-        console.log("recent messages");
+    if (action.type == "LOAD_MESSAGES") {
+        // console.log("recent messages");
         state = {
             ...state,
-            messages: action.recentMessages,
+            messages: action.messages,
         };
     }
 

@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS recipes;
+
+CREATE TABLE recipes(
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  imageUrl TEXT,
+  url TEXT NOT NULL,
+  remote_id VARCHAR(255) NOT NULL UNIQUE
+);

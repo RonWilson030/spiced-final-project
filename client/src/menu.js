@@ -48,7 +48,7 @@ export default class Menu extends Component {
                     <Link to="/uploader/">Change Profilepic</Link>
                 </div>
                 <div>
-                    <Link to="/bio/">Edit Bio</Link>
+                    <Link to="/bio/">Edit Profile</Link>
                 </div>
                 <div>
                     <Link

@@ -1,6 +1,6 @@
 import BioEditor from "./bioeditor";
 
-export default function Bio({
+export default function About({
     profilePic,
     first,
     last,

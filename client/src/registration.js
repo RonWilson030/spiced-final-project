@@ -34,7 +34,7 @@ export default class Registration extends Component {
             .then((response) => {
                 console.log("response: ", response);
                 if (response.data.length) {
-                    location.replace("/");
+                    location.replace("/profile");
                 } else {
                     this.setState((state) => ({
                         ...state,
@@ -55,7 +55,7 @@ export default class Registration extends Component {
         return (
             <div id="registration">
                 <h1>Registration</h1>
-                <div id="registration-container">
+                <div className="registration-container">
                     {this.state.error && (
                         <p>Something went wrong! Please try again.</p>
                     )}
@@ -83,11 +83,11 @@ export default class Registration extends Component {
                         placeholder="password"
                         type="password"
                     ></input>
-                    <>
+                    <div>
                         <button onClick={() => this.handleClick()}>
                             Register
                         </button>
-                    </>
+                    </div>
                     <>
                         <p>
                             Already a member? <Link to="/login">Log in!</Link>
