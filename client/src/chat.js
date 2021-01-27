@@ -10,9 +10,11 @@ export default function Chat() {
 
     const onlineUsers = useSelector((state) => state && state.onlineUsers);
 
-    // console.log("online users chat: ", onlineUsers);
+    const loggedInUser = useSelector((state) => state && state.loggedInUser);
 
-    // console.log("omessages: ", chatMessages);
+    // console.log("online users chat: ", onlineUsers);
+    // console.log("logged in user chat: ", loggedInUser);
+    // console.log("messages: ", chatMessages);
 
     const toDateString = (isoDate) => {
         const date = new Date(isoDate).toLocaleDateString("en-gb", {
@@ -39,46 +41,48 @@ export default function Chat() {
             </h3>
             <div className="online-users-container">
                 <p>Online:</p>
-                {onlineUsers.map((user) => (
-                    <div key={user.id}>
-                        <Link to={`/users/${user.id}`}>
-                            <img
-                                className="online-avatar"
-                                src={user.profile_pic || "/default.png"}
-                            ></img>
-                        </Link>
-                    </div>
-                ))}
+                {onlineUsers &&
+                    onlineUsers.map((user) => (
+                        <div key={user.id}>
+                            <Link to={`/users/${user.id}`}>
+                                <img
+                                    className="online-avatar"
+                                    src={user.profile_pic || "/default.png"}
+                                ></img>
+                            </Link>
+                        </div>
+                    ))}
             </div>
             <div className="chat-container">
-                <div>
-                    {chatMessages &&
-                        chatMessages.map((message) => (
-                            <div className="chat-wrapper" key={message.id}>
-                                <div className="chat-content">
-                                    <Link to={`/users/${message.user_id}`}>
-                                        <img
-                                            className="avatar"
-                                            src={
-                                                message.profile_pic ||
-                                                "/default.png"
-                                            }
-                                        ></img>
-                                    </Link>
-                                    <div>
-                                        {message.first} {message.last} posted on{" "}
-                                        {toDateString(message.timestamp)}
-                                        {":"}
-                                        <div>
-                                            {'"'}
-                                            {message.message}
-                                            {'"'}
-                                        </div>
-                                    </div>
+                {chatMessages.map((message) => (
+                    <div
+                        className={
+                            message.user_id === loggedInUser
+                                ? "chat-wrapper-user"
+                                : "chat-wrapper-others"
+                        }
+                        key={message.id}
+                    >
+                        <div className="chat-content">
+                            <Link to={`/users/${message.user_id}`}>
+                                <img
+                                    className="chat-avatar"
+                                    src={message.profile_pic || "/default.png"}
+                                ></img>
+                            </Link>
+                            <div>
+                                {message.first} {message.last}
+                                {":"}
+                                <div className="chat-message">
+                                    {'"'}
+                                    {message.message}
+                                    {'"'}
                                 </div>
+                                posted on {toDateString(message.timestamp)}
                             </div>
-                        ))}
-                </div>
+                        </div>
+                    </div>
+                ))}
             </div>
             <div className="chat-messenger">
                 <p>Enter your message here:</p>

@@ -18,8 +18,8 @@ export const init = (store) => {
         store.dispatch(postNewMessage(userAndMessage));
     });
 
-    socket.on("get messages", (messages) => {
-        store.dispatch(getMessages(messages));
+    socket.on("get messages", (messages, id) => {
+        store.dispatch(getMessages(messages, id));
     });
 
     socket.on("online users", (users) => {
@@ -28,12 +28,12 @@ export const init = (store) => {
     });
 
     socket.on("user joined", (user) => {
-        console.log("user joined: ", userJoined);
+        console.log("user joined: ", user);
         store.dispatch(userJoined(user));
     });
 
     socket.on("user left", (user) => {
-        console.log("user left: ", userLeft);
+        console.log("user left: ", user);
         store.dispatch(userLeft(user));
     });
 };

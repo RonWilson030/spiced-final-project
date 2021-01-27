@@ -25,9 +25,9 @@ export default class Login extends Component {
 
     handleClick() {
         axios
-            .post("/login", this.state)
+            .post("/api/login", this.state)
             .then((response) => {
-                // console.log("response data: ", response.data);
+                console.log("response data: ", response.data);
                 if (response.data.success) {
                     location.replace("/profile");
                 } else {
@@ -49,11 +49,12 @@ export default class Login extends Component {
     render() {
         return (
             <div id="login">
+                {!this.state.error ? (
+                    <p>Login:</p>
+                ) : (
+                    <p>Something went wrong! Please try again.</p>
+                )}
                 <div className="login-container">
-                    <h1>Login</h1>
-                    {this.state.error && (
-                        <p>Something went wrong! Please try again.</p>
-                    )}
                     <input
                         onChange={(e) => this.handleChange(e)}
                         name="email"

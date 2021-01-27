@@ -22,7 +22,7 @@ export default class OtherProfile extends Component {
         axios
             .get("/api/users/" + otherUserId)
             .then((response) => {
-                console.log("other-user response", response);
+                // console.log("other-user response", response);
                 if (response.data.noSuchUser) {
                     this.props.history.push("/profile");
                 } else {
@@ -44,23 +44,24 @@ export default class OtherProfile extends Component {
         return (
             <>
                 <div id="profile">
-                    <div className="list-title">
-                        {this.state.first} {this.state.last}
-                    </div>
-                    <div className="friendship-button">
-                        <FriendshipButton
-                            userId={this.props.userId}
-                            otherUserId={this.props.match.params.id}
-                        />
-                    </div>
                     <div className="profile-container">
-                        <img
-                            className="profile-avatar"
-                            src={this.state.profilePic}
-                            alt={`${this.state.first} ${this.state.last}`}
-                        />
+                        <div className="other-profile-wrapper">
+                            <img
+                                className="other-profile-avatar"
+                                src={this.state.profilePic}
+                                alt={`${this.state.first} ${this.state.last}`}
+                            />
+                            <div className="friendship-button">
+                                <FriendshipButton
+                                    userId={this.props.userId}
+                                    otherUserId={this.props.match.params.id}
+                                />
+                            </div>
+                        </div>
                         <div className="profile-content">
-                            <p>About {this.state.first}:</p>
+                            <p>
+                                {this.state.first} {this.state.last}:
+                            </p>
                             <div className="bio">{this.state.bio}</div>
                         </div>
                     </div>

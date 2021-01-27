@@ -1,9 +1,9 @@
 import { Component } from "react";
 import axios from "./axios";
 import Profile from "./profile";
-import ProfilePic from "./profilepic";
+// import ProfilePic from "./profilepic";
 import Friends from "./friends";
-// import Uploader from "./uploader";
+import Login from "./login";
 import OtherProfile from "./otherprofile";
 import Chat from "./chat";
 import Init from "./init";
@@ -57,7 +57,7 @@ export default class App extends Component {
             .get("/logout/")
             .then((response) => {
                 console.log("logout response: ", response);
-                window.location.href = "/";
+                window.location.href = "/welcome#/login/";
             })
             .catch((err) => {
                 console.log(err);
@@ -70,61 +70,107 @@ export default class App extends Component {
             <BrowserRouter>
                 <div className="main-container">
                     <header className="header-section">
-                        {/* <div>
-                            <h1>APPETITE!</h1>
-                        </div> */}
-                        <div>
-                            <ProfilePic
-                                first={this.state.first}
-                                last={this.state.last}
-                                profilePic={
-                                    this.state.profilePic || "/default.png"
-                                }
-                            />
-                        </div>
-
-                        <div className="hand-cursor">
-                            <Link to="/searchrecipes/">
-                                <i className="fas fa-utensils"></i>
-                                &nbsp;Recipes
-                            </Link>
-                        </div>
-
-                        <div className="hand-cursor">
-                            <Link to="/shoppinglist/">
-                                <i className="fas fa-shopping-cart"></i>
-                                &nbsp;List
-                            </Link>
-                        </div>
-
-                        <div className="hand-cursor">
-                            <Link to="/friends/">
-                                <i className="fas fa-user-friends"></i>
-                                &nbsp;Friends
-                            </Link>
-                        </div>
-
-                        <div className="hand-cursor">
-                            <Link to="/chat/">
-                                <i className="fas fa-comments"></i>
-                                &nbsp;Chat
-                            </Link>
-                        </div>
-
-                        <div className="hand-cursor">
-                            <Link to="/extras/">
-                                <i className="fas fa-plus-square"></i>
-                                &nbsp;Extras
-                            </Link>
-                        </div>
-
-                        <div className="hand-cursor">
-                            <button onClick={() => this.handleLogout()}>
-                                <i className="fas fa-sign-out-alt"></i>
-                                &nbsp;Logout
-                            </button>
+                        <div className="main-title">
+                            <div>
+                                <i className="fas fa-pizza-slice"></i>
+                            </div>
+                            <div>
+                                <i className="fas fa-carrot"></i>
+                            </div>
+                            <div>
+                                <i className="fas fa-fish"></i>
+                            </div>
+                            <div>APPETITE!</div>
+                            <div>
+                                <i className="fas fa-cheese"></i>
+                            </div>
+                            <div>
+                                <i className="fas fa-drumstick-bite"></i>
+                            </div>
+                            <div>
+                                <i className="fas fa-pepper-hot"></i>
+                            </div>
                         </div>
                     </header>
+                    <nav>
+                        <label htmlFor="id-menu" className="hand-cursor">
+                            <div className="nav-icon">
+                                <i className="fa fa-navicon"></i>
+                            </div>
+                        </label>
+                        <input
+                            type="checkbox"
+                            id="id-menu"
+                            className="menu"
+                            role="button"
+                        ></input>
+                        <div className="menu-navbar">
+                            <ul className="navUL">
+                                <li>
+                                    <div className="hand-cursor">
+                                        <Link to="/profile/">
+                                            <i className="fas fa-user-circle"></i>
+                                            &nbsp;Profile
+                                        </Link>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className="hand-cursor">
+                                        <Link to="/searchrecipes/">
+                                            <i className="fas fa-utensils"></i>
+                                            &nbsp;Recipes
+                                        </Link>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className="hand-cursor">
+                                        <Link to="/shoppinglist/">
+                                            <i className="fas fa-shopping-cart"></i>
+                                            &nbsp;Shopping List
+                                        </Link>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div className="hand-cursor">
+                                        <Link to="/friends/">
+                                            <i className="fas fa-user-friends"></i>
+                                            &nbsp;Friends
+                                        </Link>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div className="hand-cursor">
+                                        <Link to="/chat/">
+                                            <i className="fas fa-comments"></i>
+                                            &nbsp;Chat
+                                        </Link>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div className="hand-cursor">
+                                        <Link to="/extras/">
+                                            <i className="fas fa-plus-square"></i>
+                                            &nbsp;Extras
+                                        </Link>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <div
+                                        className="hand-cursor"
+                                        onClick={() => this.handleLogout()}
+                                    >
+                                        <a>
+                                            <i className="fas fa-sign-out-alt"></i>
+                                            &nbsp;Logout
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
 
                     <Route
                         exact
@@ -173,6 +219,8 @@ export default class App extends Component {
                     <Route exact path="/chat" render={() => <Chat />} />
 
                     <Route exact path="/extras" render={() => <Extras />} />
+
+                    <Route path="/login" render={() => <Login />} />
 
                     <Route exact path="/" render={() => <Init />} />
                 </div>

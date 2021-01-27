@@ -1,7 +1,7 @@
 import axios from "./axios";
 
 export async function getShoppingList() {
-    const { data } = await axios.get("/get-shoppinglist");
+    const { data } = await axios.get("/api/shoppinglist");
     console.log("data get list action: ", data);
     return {
         type: "SET_SHOPPINGLIST",
@@ -16,22 +16,19 @@ export async function addShoppingListItem(item) {
     };
 }
 
-export async function deleteShoppingItem(itemId) {
-    const { data } = await axios.post("/shoppinglist/delete", {
-        action: "deleteShoppingItem",
-        itemId,
-    });
+export async function deleteShoppingItem(id) {
+    const { data } = await axios.delete(`/api/shoppinglist/${id}`);
     // console.log("data delete fave action: ", data);
     if (data.success) {
         return {
             type: "DELETE_SHOPPINGLISTITEM",
-            deleteShoppingList: itemId,
+            deleteShoppingList: id,
         };
     }
 }
 
 export async function getFavourites() {
-    const { data } = await axios.get("/get-favourites");
+    const { data } = await axios.get("/api/favourites");
     // console.log("data get favourites action: ", data);
     return {
         type: "GET_FAVOURITES",
@@ -39,22 +36,19 @@ export async function getFavourites() {
     };
 }
 
-export async function deleteFavourite(favouriteId) {
-    const { data } = await axios.post("/favourites/delete", {
-        action: "deleteFavourite",
-        favouriteId,
-    });
+export async function deleteFavourite(id) {
+    const { data } = await axios.delete(`/api/favourites/${id}`);
     // console.log("data delete fave action: ", data);
     if (data.success) {
         return {
             type: "DELETE_FAVOURITE",
-            deleteFavourite: favouriteId,
+            deleteFavourite: id,
         };
     }
 }
 
 export async function getFriends() {
-    const { data } = await axios.get("/get-friends");
+    const { data } = await axios.get("/api/friends");
     // console.log("data get friendslist: ", data);
     return {
         type: "GET_FRIENDS",
@@ -63,7 +57,7 @@ export async function getFriends() {
 }
 
 export async function acceptRequest(otherUserId) {
-    const { data } = await axios.post("/friendship/action", {
+    const { data } = await axios.post("/api/friendship/action", {
         action: "Accept Request",
         otherUserId,
     });
@@ -78,7 +72,7 @@ export async function acceptRequest(otherUserId) {
 }
 
 export async function disconnect(otherUserId) {
-    const { data } = await axios.post("/friendship/action", {
+    const { data } = await axios.post("/api/friendship/action", {
         action: "disconnect",
         otherUserId,
     });
@@ -101,12 +95,14 @@ export async function postNewMessage(userAndMessage) {
     };
 }
 
-export async function getMessages(messages) {
+export async function getMessages(messages, id) {
     // console.log("getMessages: ", messages);
+    // console.log("message user id: ", id);
 
     return {
         type: "LOAD_MESSAGES",
         messages: messages,
+        loggedInUser: id,
     };
 }
 
@@ -120,7 +116,7 @@ export async function onlineUsers(onlineUsers) {
 }
 
 export async function userJoined(userJoined) {
-    // console.log("getMessages: ", messages);
+    // console.log("user joined: ", userJoined);
 
     return {
         type: "USER_JOINED",
@@ -129,7 +125,7 @@ export async function userJoined(userJoined) {
 }
 
 export async function userLeft(userLeft) {
-    // console.log("getMessages: ", messages);
+    console.log("user left: ", userLeft);
 
     return {
         type: "USER_LEFT",

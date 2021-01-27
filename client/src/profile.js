@@ -14,13 +14,11 @@ export default function Profile({
     const [uploaderIsVisible, setUploaderIsVisible] = useState(false);
 
     const toggleUploader = () => {
-        // console.log("toggle uploader running!");
         setUploaderIsVisible(!uploaderIsVisible);
     };
 
     return (
         <div id="profile">
-            <div className="list-title">My profile</div>
             <div className="profile-container">
                 <img
                     className="profile-avatar hand-cursor"

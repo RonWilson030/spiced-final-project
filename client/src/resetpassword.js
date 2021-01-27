@@ -26,7 +26,7 @@ export default class ResetPassword extends Component {
 
     handleResetClick() {
         axios
-            .post("/password/reset", this.state)
+            .post("/api/password/reset", this.state)
             .then((response) => {
                 console.log("response data: ", response.data);
                 if (response.data.success) {
@@ -52,7 +52,7 @@ export default class ResetPassword extends Component {
 
     handleSubmitCode() {
         axios
-            .post("/password/reset/code", this.state)
+            .post("/api/password/reset/code", this.state)
             .then((response) => {
                 console.log("response data code: ", response.data);
                 if (response.data.success) {

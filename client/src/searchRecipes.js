@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "./axios";
 
 export default function SearchRecipes() {
+    const [recipeQuery, setRecipeQuery] = useState("");
     const [query, setQuery] = useState("");
     const [recipes, setRecipes] = useState([]);
     const [showMoreButton, setShowMoreButton] = useState(false);
@@ -10,9 +11,9 @@ export default function SearchRecipes() {
     const [error, setError] = useState(false);
 
     const handleSearchByRecipes = () => {
-        if (!query) {
+        if (!recipeQuery) {
             setRecipes([]);
-            setQuery("");
+            setRecipeQuery("");
             return;
         }
 
@@ -20,13 +21,14 @@ export default function SearchRecipes() {
 
         (async () => {
             const { data, status } = await axios.get("/api/recipes/search", {
-                params: { q: query },
+                params: { q: recipeQuery },
             });
             // console.log("recipe data: ", data);
             if (!abort && status === 200) {
                 setRecipes(data.recipes);
                 setCategory("recipe");
                 setShowMoreButton(true);
+                setRecipeQuery("");
             } else {
                 setError(true);
             }
@@ -42,13 +44,13 @@ export default function SearchRecipes() {
 
         (async () => {
             const { data, status } = await axios.get("/api/recipes/search", {
-                params: { q: query, offset: 12 },
+                params: { q: recipeQuery, offset: 12 },
             });
             if (!abort && status === 200) {
                 // console.log("more recipe data: ", data);
                 setRecipes([...recipes, ...data.recipes]);
                 setShowMoreButton(false);
-                setQuery("");
+                setRecipeQuery("");
             }
         })();
 
@@ -107,22 +109,24 @@ export default function SearchRecipes() {
         <div>
             <div id="recipes">
                 <div className="search-recipes">
-                    <div>
+                    <div className="search-wrapper">
                         <div className="list-title">Search for recipes:</div>
                         <input
-                            onChange={(e) => setQuery(e.target.value)}
+                            onChange={(e) => setRecipeQuery(e.target.value)}
                             placeholder="search recipes..."
+                            value={recipeQuery}
                         />
                         <button onClick={handleSearchByRecipes}>
                             Search recipes
                         </button>
                     </div>
 
-                    <div>
+                    <div className="search-wrapper">
                         <div className="list-title">Search by ingredients:</div>
                         <input
                             onChange={(e) => setQuery(e.target.value)}
                             placeholder="search ingredients..."
+                            value={query}
                         />
                         <button onClick={handleSearchByIngredients}>
                             Search by ingredients

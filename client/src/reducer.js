@@ -4,6 +4,7 @@ const INITIAL_STATE = {
     messages: [],
     shoppingList: [],
     onlineUsers: [],
+    loggedInUser: [],
 };
 
 export default function (state = INITIAL_STATE, action) {
@@ -90,6 +91,7 @@ export default function (state = INITIAL_STATE, action) {
         state = {
             ...state,
             messages: action.messages,
+            loggedInUser: action.loggedInUser,
         };
     }
 

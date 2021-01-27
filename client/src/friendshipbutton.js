@@ -10,7 +10,7 @@ export default function FriendshipButton({ userId, otherUserId }) {
     useEffect(() => {
         if (otherUserId && userId) {
             axios
-                .get(`/friendship/status/${otherUserId}`)
+                .get(`/api/friendship/status/${otherUserId}`)
                 .then((response) => {
                     // console.log("friendship status data: ", response);
                     const result = response.data.rows;
@@ -29,7 +29,7 @@ export default function FriendshipButton({ userId, otherUserId }) {
 
     const handleClick = () => {
         axios
-            .post("/friendship/action/", {
+            .post("/api/friendship/action/", {
                 action: buttonText,
                 otherUserId,
             })

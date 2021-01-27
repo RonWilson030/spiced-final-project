@@ -207,15 +207,6 @@ module.exports.deleteFavourite = (userId, recipeId) => {
     );
 };
 
-// module.exports.getFavourites = (userId) => {
-//     return db.query(
-//         `SELECT *
-//         FROM favourites
-//         WHERE user_id = $1`,
-//         [userId]
-//     );
-// };
-
 module.exports.addListItem = (userId, item) => {
     return db.query(
         `INSERT INTO shopping_list (user_id, item)

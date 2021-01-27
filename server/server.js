@@ -266,7 +266,7 @@ app.get("/api/users/:id", (req, res) => {
     }
 });
 
-app.post("/registration", (req, res) => {
+app.post("/api/registration", (req, res) => {
     // console.log("req body: ", req.body);
     const { first, last, email, password } = req.body;
     if (first && last && email && password) {
@@ -283,33 +283,45 @@ app.post("/registration", (req, res) => {
                     console.log("registration error", error);
                 });
         });
+    } else {
+        console.log("registration error");
+        res.statusCode = 401;
+        res.send();
     }
 });
 
-app.post("/login", (req, res) => {
+app.post("/api/login", (req, res) => {
     const { email, password } = req.body;
     // console.log("req body: ", req.body);
-    db.getUserByEmail(email).then((userResult) => {
-        // console.log("password result:", userResult);
-        if (userResult.rows.length === 1) {
-            const hash = userResult.rows[0].password;
-            compare(password, hash)
-                .then((matched) => {
-                    if (matched) {
-                        // console.log("matched result:", matched);
-                        const userId = userResult.rows[0].id;
-                        req.session.userId = userId;
-                        res.json({ success: true });
-                    }
-                })
-                .catch((error) => {
-                    console.log("login error:", error);
-                });
-        }
-    });
+    db.getUserByEmail(email)
+        .then((userResult) => {
+            // console.log("password result:", userResult);
+            if (userResult.rows.length === 1) {
+                const hash = userResult.rows[0].password;
+                compare(password, hash)
+                    .then((matched) => {
+                        if (matched) {
+                            // console.log("matched result:", matched);
+                            const userId = userResult.rows[0].id;
+                            req.session.userId = userId;
+                            res.json({ success: true });
+                        }
+                    })
+                    .catch((error) => {
+                        console.log("login error:", error);
+                    });
+            } else {
+                console.log("login error");
+                res.statusCode = 401;
+                res.send();
+            }
+        })
+        .catch((error) => {
+            console.log("login error:", error);
+        });
 });
 
-app.post("/password/reset", (req, res) => {
+app.post("/api/password/reset", (req, res) => {
     const { email } = req.body;
     // console.log("reset req body: ", req.body);
     db.getUserByEmail(email).then((emailResult) => {
@@ -362,7 +374,7 @@ app.post("/password/reset/code", (req, res) => {
     });
 });
 
-app.post("/uploader", uploader.single("image"), s3.upload, (req, res) => {
+app.post("/api/uploader", uploader.single("image"), s3.upload, (req, res) => {
     const userId = req.session.userId;
     const url = s3Url + req.file.filename;
     db.updateProfilePic(userId, url)
@@ -377,7 +389,7 @@ app.post("/uploader", uploader.single("image"), s3.upload, (req, res) => {
         .catch();
 });
 
-app.post("/bio", (req, res) => {
+app.post("/api/bio", (req, res) => {
     // console.log("req body: ", req.body);
     const userId = req.session.userId;
     const { draftBio } = req.body;
@@ -392,7 +404,7 @@ app.post("/bio", (req, res) => {
         });
 });
 
-app.get("/friendship/status/:otherUserId", (req, res) => {
+app.get("/api/friendship/status/:otherUserId", (req, res) => {
     // console.log("req params: ", req.params);
     const otherUserId = parseInt(req.params.otherUserId);
     const userId = req.session.userId;
@@ -406,7 +418,7 @@ app.get("/friendship/status/:otherUserId", (req, res) => {
         });
 });
 
-app.post("/friendship/action", (req, res) => {
+app.post("/api/friendship/action", (req, res) => {
     const userId = req.session.userId;
     const { action, otherUserId } = req.body;
     if (action === "Make Request") {
@@ -418,7 +430,7 @@ app.post("/friendship/action", (req, res) => {
             .catch((error) => {
                 console.log("make request error", error);
             });
-    } else if (action === "Cancel Request" || action === "Disconnect") {
+    } else if (action === "Cancel Request" || action === "disconnect") {
         // console.log("user id & otheruserId:", userId, otherUserId);
         db.cancelRequest({ userId, otherUserId })
             .then((response) => {
@@ -440,7 +452,7 @@ app.post("/friendship/action", (req, res) => {
     }
 });
 
-app.get("/get-friends", (req, res) => {
+app.get("/api/friends", (req, res) => {
     const userId = req.session.userId;
     db.getFriends(userId)
         .then((result) => {
@@ -452,7 +464,7 @@ app.get("/get-friends", (req, res) => {
         });
 });
 
-app.get("/get-favourites", (req, res) => {
+app.get("/api/favourites", (req, res) => {
     const userId = req.session.userId;
     db.getUserFavouriteRecipes(userId)
         .then((result) => {
@@ -464,38 +476,31 @@ app.get("/get-favourites", (req, res) => {
         });
 });
 
-app.post("/favourites/delete", (req, res) => {
+app.delete("/api/favourites/:id", (req, res) => {
     const userId = req.session.userId;
-    const { action, favouriteId } = req.body;
-    if (action === "deleteFavourite") {
-        // console.log("user id & otheruserId:", userId, otherUserId);
-        db.deleteFavourite(userId, favouriteId)
-            .then((response) => {
-                // console.log("delete fave request response: ", response);
-                res.json({ success: true, rows: response.rows });
-            })
-            .catch((error) => {
-                console.log("delete favourites error", error);
-            });
-    }
+    db.deleteFavourite(userId, req.params.id)
+        .then((response) => {
+            // console.log("delete fave request response: ", response);
+            res.json({ success: true, rows: response.rows });
+        })
+        .catch((error) => {
+            console.log("delete favourites error", error);
+        });
 });
 
-app.get("/api/shoppinglist/add", async (req, res) => {
-    // console.log("item req params : ", req.params);
-    // console.log("item req query : ", req.query);
-    // console.log("req body: ", req.body);
-    const { item } = req.query;
+app.post("/api/shoppinglist/add", async (req, res) => {
     const userId = req.session.userId;
+    const { item } = req.body;
     try {
         const addItemResult = await db.addListItem(userId, item);
-        console.log("add listitem result: ", addItemResult);
+        // console.log("add listitem result: ", addItemResult);
         res.json(addItemResult.rows[0]);
     } catch (error) {
         console.log("get listitem error", error);
     }
 });
 
-app.get("/get-shoppinglist", async (req, res) => {
+app.get("/api/shoppinglist", async (req, res) => {
     const userId = req.session.userId;
     try {
         const getListResult = await db.getShoppingList(userId);
@@ -506,20 +511,16 @@ app.get("/get-shoppinglist", async (req, res) => {
     }
 });
 
-app.post("/shoppinglist/delete", (req, res) => {
+app.delete("/api/shoppinglist/:id", (req, res) => {
     const userId = req.session.userId;
-    const { action, itemId } = req.body;
-    if (action === "deleteShoppingItem") {
-        // console.log("user id & otheruserId:", userId, otherUserId);
-        db.deleteListItem(userId, itemId)
-            .then((response) => {
-                // console.log("delete fave request response: ", response);
-                res.json({ success: true, rows: response.rows });
-            })
-            .catch((error) => {
-                console.log("delete favourites error", error);
-            });
-    }
+    db.deleteListItem(userId, req.params.id)
+        .then((response) => {
+            // console.log("delete fave request response: ", response);
+            res.json({ success: true, rows: response.rows });
+        })
+        .catch((error) => {
+            console.log("delete favourites error", error);
+        });
 });
 
 app.get("/api/search/trivia", async (req, res) => {
@@ -552,6 +553,7 @@ app.get("/api/search/joke", async (req, res) => {
 
 app.get("/logout", (req, res) => {
     req.session = null;
+    res.redirect("/welcome#/login");
     res.send();
 });
 
@@ -571,8 +573,8 @@ let onlineUsers = {};
 const onlineUserCounters = {};
 
 io.on("connection", async (socket) => {
-    console.log(`socket with id ${socket.id} just connected`);
-    console.log("socket.request.session: ", socket.request.session);
+    // console.log(`socket with id ${socket.id} just connected`);
+    // console.log("socket.request.session: ", socket.request.session);
 
     const userId = socket.request.session.userId;
 
@@ -585,35 +587,19 @@ io.on("connection", async (socket) => {
 
     // console.log("online users: ", onlineUsers);
 
-    const onlineUsers = Object.keys(onlineUserCounters).filter(
+    const usersOnline = Object.keys(onlineUserCounters).filter(
         (id) => id !== userId
     );
 
     if (onlineUserCounters[userId] === 1) {
         const userResult = await db.getUsersByIds([userId]);
-
         socket.broadcast.emit("user joined", userResult.rows[0]);
     }
 
-    if (onlineUsers) {
-        const usersResult = await db.getUsersByIds(onlineUsers);
+    if (usersOnline) {
+        const usersResult = await db.getUsersByIds(usersOnline);
         socket.emit("online users", usersResult.rows);
     }
-
-    // submit to userId: socket.emit("online users", onlineUsers)
-
-    // filter usersOnline
-    // filer userJoined
-
-    // if (usersOnline)
-    // db.getUsersByIds(usersOnline)
-    // onlineUsers: result.rows
-    // socket.emit("online users", onlineUsers)
-
-    // if (userJoined.length === 1)
-    // db.getUsersByIds([userId])
-    // userJoined: result.rows
-    // socket.broadcast.emit("user joined", userJoined)
 
     socket.on("disconnect", () => {
         const userId = onlineUsers[socket.id];
@@ -621,6 +607,8 @@ io.on("connection", async (socket) => {
 
         onlineUserCounters[userId] = onlineUserCounters[userId] - 1;
         if (onlineUserCounters[userId] === 0) {
+            // console.log("user left", userId);
+            delete onlineUserCounters[userId];
             io.emit("user left", userId);
         }
     });
@@ -654,8 +642,7 @@ io.on("connection", async (socket) => {
 
     db.getMessages()
         .then(({ rows: messages }) => {
-            // console.log("get messages result: ", messages);
-            socket.emit("get messages", messages);
+            socket.emit("get messages", messages, userId);
         })
         .catch((error) => {
             console.log("get chat error", error);

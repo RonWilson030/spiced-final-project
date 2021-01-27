@@ -35,7 +35,7 @@ export default class BioEditor extends Component {
         this.setEditMode(false);
 
         axios
-            .post("/bio", this.state)
+            .post("/api/bio", this.state)
             .then((response) => {
                 // console.log("bio editor response: ", response);
                 this.props.setBio(response.data.bio);

@@ -4,6 +4,7 @@ import axios from "./axios";
 export default function Extras() {
     const [trivia, setTrivia] = useState("");
     const [joke, setJoke] = useState("");
+    const [category, setCategory] = useState("");
 
     const handleTrivia = () => {
         let abort;
@@ -13,6 +14,7 @@ export default function Extras() {
             if (!abort && status === 200) {
                 console.log("trivia data: ", data);
                 const { text } = data.result;
+                setCategory("trivia");
                 setTrivia(text);
             }
         })();
@@ -30,6 +32,7 @@ export default function Extras() {
             if (!abort && status === 200) {
                 console.log("joke data: ", data);
                 const { text } = data.result;
+                setCategory("joke");
                 setJoke(text);
             }
         })();
@@ -56,8 +59,7 @@ export default function Extras() {
                     </div>
                 </div>
                 <div className="extras-results">
-                    {joke}
-                    {trivia}
+                    {category === "joke" ? <p>{joke}</p> : <p>{trivia}</p>}
                 </div>
             </div>
         </div>

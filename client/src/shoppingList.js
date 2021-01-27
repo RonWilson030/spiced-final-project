@@ -25,11 +25,11 @@ export default function ShoppingList() {
 
     const handleAddItem = () => {
         (async () => {
-            const { data, status } = await axios.get("/api/shoppinglist/add", {
-                params: { item: addItem },
+            const { data, status } = await axios.post("/api/shoppinglist/add", {
+                item: addItem,
             });
             if (status === 200) {
-                console.log("shoppinglist data: ", data);
+                // console.log("shoppinglist data: ", data);
                 dispatch(addShoppingListItem(data));
                 setAddItem("");
             }
@@ -42,6 +42,7 @@ export default function ShoppingList() {
                 <div className="shoppinglist-container">
                     <h2>Add to shopping list:</h2>
                     <input
+                        value={addItem}
                         onChange={(e) => setAddItem(e.target.value)}
                         placeholder="Add..."
                     />

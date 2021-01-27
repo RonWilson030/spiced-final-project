@@ -41,15 +41,15 @@ export default function FindPeople() {
                                 <Link to={`/users/${user.id}`} key={user.id}>
                                     <div className="friends">
                                         <img
-                                            id="friends-avatar"
+                                            className="friends-avatar"
                                             src={
                                                 user.profile_pic ||
                                                 "/default.png"
                                             }
                                         ></img>
-                                        <div className="name-style">
+                                        <p>
                                             {user.first} {user.last}
-                                        </div>
+                                        </p>
                                     </div>
                                 </Link>
                             ))}

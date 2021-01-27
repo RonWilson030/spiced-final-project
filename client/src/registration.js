@@ -30,7 +30,7 @@ export default class Registration extends Component {
     handleClick() {
         // console.log("click!");
         axios
-            .post("/registration", this.state)
+            .post("/api/registration", this.state)
             .then((response) => {
                 console.log("response: ", response);
                 if (response.data.length) {
@@ -54,11 +54,12 @@ export default class Registration extends Component {
     render() {
         return (
             <div id="registration">
-                <p>Be part of our cooking community:</p>
+                {!this.state.error ? (
+                    <p>Be part of our cooking community:</p>
+                ) : (
+                    <p>Something went wrong! Please try again.</p>
+                )}
                 <div className="registration-container">
-                    {this.state.error && (
-                        <p>Something went wrong! Please try again.</p>
-                    )}
                     <input
                         onChange={(e) => this.handleChange(e)}
                         name="first"

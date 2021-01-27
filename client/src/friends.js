@@ -29,6 +29,9 @@ export default function Friends() {
 
     return (
         <div id="friends">
+            <div>
+                <FindPeople />
+            </div>
             <div className="friends-container">
                 <div className="friends-content">
                     {friends.length > 0 ? (
@@ -41,7 +44,7 @@ export default function Friends() {
                                             <Link to={`/users/${user.id}`}>
                                                 <div>
                                                     <img
-                                                        id="friends-avatar"
+                                                        className="friends-avatar"
                                                         src={
                                                             user.profile_pic ||
                                                             "/default.png"
@@ -81,7 +84,7 @@ export default function Friends() {
                                             <Link to={`/users/${user.id}`}>
                                                 <div>
                                                     <img
-                                                        id="friends-avatar"
+                                                        className="friends-avatar"
                                                         src={
                                                             user.profile_pic ||
                                                             "/default.png"
@@ -109,9 +112,6 @@ export default function Friends() {
                         <p>You have no requests!</p>
                     )}
                 </div>
-            </div>
-            <div>
-                <FindPeople />
             </div>
         </div>
     );

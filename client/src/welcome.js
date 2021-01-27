@@ -7,8 +7,30 @@ import ResetPassword from "./resetpassword";
 export default function Welcome() {
     return (
         <div id="welcome">
+            <header className="header-section">
+                <div className="main-title">
+                    <div>
+                        <i className="fas fa-pizza-slice"></i>
+                    </div>
+                    <div>
+                        <i className="fas fa-carrot"></i>
+                    </div>
+                    <div>
+                        <i className="fas fa-fish"></i>
+                    </div>
+                    <div>APPETITE!</div>
+                    <div>
+                        <i className="fas fa-cheese"></i>
+                    </div>
+                    <div>
+                        <i className="fas fa-drumstick-bite"></i>
+                    </div>
+                    <div>
+                        <i className="fas fa-pepper-hot"></i>
+                    </div>
+                </div>
+            </header>
             <div className="welcome-wrapper">
-                <h1>APPETITE!</h1>
                 <h3>The little app for foodies...</h3>
 
                 <p>
